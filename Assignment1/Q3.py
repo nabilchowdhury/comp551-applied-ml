@@ -23,13 +23,10 @@ N_examples = df.shape[0]
 M_rows = df.shape[1]
 
 data = np.array(df, dtype=np.float64)
-print(N_examples)
-# X_all = np.array(df.drop([M_rows - 1], axis=1), dtype=np.float64)
-# y_all = np.array(df[M_rows - 1], dtype=np.float64)
 
 
 '''
-Fit data and report 5-fold cross-validation error
+Part 2) Fit data and report 5-fold cross-validation error
 '''
 # Normal equation with regularization (lambda_reg=0 means no regularization)
 def fit(X, y, lambda_reg=0):
@@ -86,3 +83,27 @@ for pair in splits:
     all_weights.append(weights)
 
 print(np.average(MSEs))
+
+'''
+Part 3) Ridge-regression
+'''
+INCREMENTS = 1000
+MSE_vs_lambda = []
+for i in range(INCREMENTS):
+
+    cur_mse = 0
+    for pair in splits:
+        X_train = pair['train'].drop([M_rows - 1], axis=1)
+        y_train = pair['train'][M_rows - 1]
+        X_test = pair['test'].drop([M_rows - 1], axis=1)
+        y_test = pair['test'][M_rows - 1]
+
+        weights = fit(X_train, y_train, 1 / INCREMENTS * i)
+        cur_mse += mean_square_error(X_test, y_test, weights)
+
+    MSE_vs_lambda.append(cur_mse / len(splits))
+
+plt.figure(1)
+plt.plot(np.arange(0, 1, 1/INCREMENTS), MSE_vs_lambda)
+
+plt.show()

@@ -68,7 +68,7 @@ def visualize(W, title=""):
         x_axis[i] = pow(x_axis[1], i)
     decision_boundary = np.matmul(x_axis, W)
 
-    plt.figure(figsize=FIGSIZE)
+    plt.figure(1, figsize=FIGSIZE)
     for i, key in enumerate(example_set, 1):
         plt.subplot(3, 1, i)
         plt.scatter(example_set[key][:, 1], output_set[key])
@@ -77,8 +77,15 @@ def visualize(W, title=""):
         plt.xlabel('x')
         plt.ylabel('y')
         plt.ylim([-50, 50])
-
     plt.tight_layout()
+
+    plt.figure(2)
+    plt.scatter(example_set['valid'][:, 1], output_set['valid'])
+    plt.plot(x_axis[1], decision_boundary, 'r--')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.ylim([-50, 50])
+
     plt.show()
 
 
@@ -103,7 +110,7 @@ best_lambda = 9999999
 lowest_mse = 9999999
 for i in range(INCREMENTS + 1):
     # Calculate w with on the TRAINING set using regularization
-    w = fit(example_set['train'], output_set['train'], 1/INCREMENTS * i)
+    w = fit(example_set['train'], output_set['train'], 1 / INCREMENTS * i)
     # Use w to compute MSE
     mse_train = mean_square_error(example_set['train'], output_set['train'], w)
     mse_valid = mean_square_error(example_set['valid'], output_set['valid'], w)
