@@ -58,7 +58,7 @@ print('normaleq weights:', weights_normal)
 Try gradient descent first for fun
 '''
 ALPHA = 1e-6
-EPOCHS = 50000
+EPOCHS = 100
 
 weights = np.random.uniform(high=5., size=[MAX_DEGREE + 1])
 
@@ -104,8 +104,14 @@ best_alpha = -1
 lowest_mse = 99999
 for i in range(6):
     cur_alpha = pow(1, -i)
+    weights = np.random.uniform(high=5., size=[MAX_DEGREE + 1])
     weights, _, _ = SGD(X, y, EPOCHS, weights, cur_alpha)
-    
+    mse_for_valid = mean_square_error(example_set['valid'], output_set['valid'], weights)
+    print(mse_for_valid)
+    print(weights)
+    if mse_for_valid < lowest_mse:
+        lowest_mse = mse_for_valid
+        best_alpha = cur_alpha
 
 # # Decision boundary x axis
 # x_axis = pd.DataFrame(np.ones(GRANULARITY))

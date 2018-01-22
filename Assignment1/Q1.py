@@ -45,7 +45,7 @@ for key in example_set:
 
 # Normal equation with regularization (lambda_reg=0 means no regularization)
 def fit(X, y, lambda_reg=0):
-    identity = np.identity(MAX_DEGREE + 1)
+    identity = np.identity(X.shape[1])
     # identity[0, 0] = 0 # We do not penalize the bias term
 
     X_square = np.matmul(np.transpose(X), X) + lambda_reg * identity
