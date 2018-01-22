@@ -76,69 +76,92 @@
 
 \maketitle % Print the title
 
-%----------------------------------------------------------------------------------------
+%--------------
 %	PROBLEM 1
-%----------------------------------------------------------------------------------------
+%--------------
 
 \section{Model Selection}
-%------------------------------------------------
+%--------------
 \subsection{Fitting 20-degree polynomial to the dataset}
-Dataset-1 consists of a real-valued scalar as input, and a real-valued scalar as output. In order to fit a 20 degree polynomial, we must create features \textit{x\textsuperscript{2}, x\textsuperscript{3},..., x\textsuperscript{20}}, since \textit{x\textsuperscript{1}} is already given to us. We must also include \textit{x\textsuperscript{0}} in the input (the bias term). \\
+Dataset-1 consists of a real-valued scalar as input, and a real-valued scalar as output. In order to fit a 20 degree polynomial, we must create features \textit{x\textsuperscript{2}, x\textsuperscript{3},..., x\textsuperscript{20}}, since \textit{x\textsuperscript{1}} is already given to us. We must also include \textit{x\textsuperscript{0} = 1} in the input (the bias term). We must find \textit{w\textsubscript{0}, w\textsubscript{1},..., w\textsubscript{20}} such that \textit{\^{y} = w\textsubscript{0} + w\textsubscript{1}x\textsuperscript{1} + ... + w\textsubscript{20}x\textsuperscript{20}}, where \^{y} is the prediction. \\
 
-Applying the closed form solution  \(w = (X^TX)^{-1}X^Ty\) yields the least-squares weights \textit{w} for the polynomial. Using these weights, the following mean-squared-errors for the training and validation sets were calculated:
+Applying the closed form solution  \(w = (X^TX)^{-1}X^Ty\) yields the least-squares weights \textit{w} for the polynomial. Using these weights, the following mean-squared-errors for the training, validation and test sets were calculated:
 
 \begin{center}
 \begin{tabular}{ |c|c| } 
- \hline
- \textbf{Set} & \textbf{MSE} \\ 
- \hline
- Train & 7.15259 \\
- Valid & 458.64632 \\ 
- \hline
+	\hline
+	\textbf{Set} & \textbf{MSE} \\ 
+	\hline
+	Train & 7.15259 \\
+	Valid & 458.64632 \\ 
+	Test & 17.25163 \\
+	\hline
 \end{tabular}
 \end{center}
 
 Here is the fit on the training, validation, and test sets:
 \begin{figure}[H]
-  \includegraphics[width=\linewidth]{q1p1.png}
-  \caption{Fit of 20-degree polynomial without regularization}
-  \label{fig:q1pq}
+    \includegraphics[width=\linewidth]{q1p1.png}
+    \caption{Fit of 20-degree polynomial without regularization}
+    \label{fig:q1p1}
 \end{figure}
 
 
-A closer look at the training plot shows oscillations of the fit (i.e. it is trying very hard to fit the training data). This observation, along with a high validation MSE of 458.64632 indicates that the 20-degree polynomial overfits the dataset. In other words, while the training MSE is low, the curve does not fit the vali 
+A closer look at the training plot shows oscillations in the fit (i.e. it is trying very hard to fit the training data). This observation, along with a high validation MSE of 458.64632 indicates that the 20-degree polynomial overfits the dataset. In other words, while the training MSE is low, the curve does not generalize well to the validation set.
 
-%----------------------------------------------------------------------------------------
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q1p12.png}
+    \caption{Fits training set well}
+    \label{fig:q1p12}
+    \includegraphics[width=\linewidth]{q1p13.png}
+    \caption{Fit does not generalize well to validation set}
+    \label{fig:q1p13}
+\end{figure}
+
+\subsection{Adding L2 regularization to the model}
+Adding L2 regularization to our model requires changing the closed form solution by adding a \( \lambda I \) term to \(X^TX\) as follows:
+\[ w = (X^TX + \lambda I)^{-1}X^Ty \]
+
+Varying \(\lambda\) from 0 to 1 with increments of .0001 yields the following results for the training and validation sets:
+
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q1p14.png}
+    \caption{\(\lambda\) vs MSE for training and validation sets}
+    \label{fig:q1p14}
+\end{figure}
+
+The optimum \(\lambda\), based on the lowest MSE of the validation set is 0.0197. Retraining the model with this chosen lambda yields much better MSEs for the validation and test sets:
+
+\begin{center}
+\begin{tabular}{ |c|c| } 
+	\hline
+	\textbf{Set} & \textbf{MSE} \\ 
+	\hline
+	Valid & 9.13508 \\ 
+	Test & 10.73230 \\
+	\hline
+\end{tabular}
+\end{center}
+
+We can also visualize this regularized fit on the test set:
+
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q1p15.png}
+    \caption{Fit of 20-degree polynomial with optimum lambda}
+    \label{fig:q1p15}
+\end{figure}
+
+\subsection{Estimation of degree of source polynomial}
+
+Observing the regularized fit of the model indicates two sharp bends (at the ends), with approximately 3 slight bends in between. This indicates that a 6\textsuperscript{th} degree polynomial is a good estimate of the source polynomial.
+
+%--------------
 %	PROBLEM 2
-%----------------------------------------------------------------------------------------
+%--------------
 
-\section{Lists}
+\section{Gradient Descent For Regression}
+%--------------
+\subsection{Fitting a linear regression model using Stochastic Gradient Descent}
 
-%------------------------------------------------
-
-\subsection{Example of list (3*itemize)}
-\begin{itemize}
-	\item First item in a list 
-		\begin{itemize}
-		\item First item in a list 
-			\begin{itemize}
-			\item First item in a list 
-			\item Second item in a list 
-			\end{itemize}
-		\item Second item in a list 
-		\end{itemize}
-	\item Second item in a list 
-\end{itemize}
-
-%------------------------------------------------
-
-\subsection{Example of list (enumerate)}
-\begin{enumerate}
-\item First item in a list 
-\item Second item in a list 
-\item Third item in a list
-\end{enumerate}
-
-%----------------------------------------------------------------------------------------
 
 \end{document}

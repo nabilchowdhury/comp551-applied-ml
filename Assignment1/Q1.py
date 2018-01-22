@@ -68,7 +68,7 @@ def visualize(W, title=""):
         x_axis[i] = pow(x_axis[1], i)
     decision_boundary = np.matmul(x_axis, W)
 
-    plt.figure(1, figsize=FIGSIZE)
+    plt.figure(1, figsize=[9, 10])
     for i, key in enumerate(example_set, 1):
         plt.subplot(3, 1, i)
         plt.scatter(example_set[key][:, 1], output_set[key])
@@ -79,13 +79,13 @@ def visualize(W, title=""):
         plt.ylim([-50, 50])
     plt.tight_layout()
 
-    # plt.figure(2)
-    # plt.scatter(example_set['train'][:, 1], output_set['train'])
-    # plt.plot(x_axis[1], decision_boundary, 'r--')
-    # plt.title('Unregularized fit on Training set')
-    # plt.xlabel('x')
-    # plt.ylabel('y')
-    # plt.ylim([-50, 50])
+    plt.figure(2, figsize=[9, 10])
+    plt.scatter(example_set['test'][:, 1], output_set['test'])
+    plt.plot(x_axis[1], decision_boundary, 'r--')
+    plt.title('Regularized fit on Test set')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.ylim([-50, 50])
 
     plt.show()
 
@@ -131,6 +131,9 @@ OPT_WEIGHTS = fit(example_set['train'], output_set['train'], best_lambda)
 # Test performance
 test_mse = mean_square_error(example_set['test'], output_set['test'] , OPT_WEIGHTS)
 print('MSE of test set:', test_mse)
+# Display MSEs for each set
+for key in example_set:
+    print('MSE for', key, mean_square_error(example_set[key], output_set[key], OPT_WEIGHTS))
 
 # Plot Lambda vs MSE for train and valid sets
 plt.figure(figsize=FIGSIZE)
