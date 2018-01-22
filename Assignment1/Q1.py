@@ -79,12 +79,13 @@ def visualize(W, title=""):
         plt.ylim([-50, 50])
     plt.tight_layout()
 
-    plt.figure(2)
-    plt.scatter(example_set['valid'][:, 1], output_set['valid'])
-    plt.plot(x_axis[1], decision_boundary, 'r--')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.ylim([-50, 50])
+    # plt.figure(2)
+    # plt.scatter(example_set['train'][:, 1], output_set['train'])
+    # plt.plot(x_axis[1], decision_boundary, 'r--')
+    # plt.title('Unregularized fit on Training set')
+    # plt.xlabel('x')
+    # plt.ylabel('y')
+    # plt.ylim([-50, 50])
 
     plt.show()
 
@@ -140,6 +141,7 @@ plt.title("Part 2: Lambda vs MSE")
 plt.xlabel('Lambda')
 plt.ylabel('MSE')
 plt.legend()
+plt.savefig('q1p14.png')
 plt.show()
 
 # Plot chosen model
