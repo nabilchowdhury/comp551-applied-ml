@@ -61,9 +61,9 @@ Try gradient descent first for fun
 ALPHA = 1e-5
 EPOCHS = 20000
 
-# weights = np.random.uniform(high=10., size=[MAX_DEGREE + 1])
-weights = np.array([4., 7.], dtype=np.float64)
-print('weghts oggg', weights)
+weights_original = np.random.uniform(high=10., size=[MAX_DEGREE + 1])
+# weights = np.array([4., 7.], dtype=np.float64)
+print('weights original', weights_original)
 X = example_set['train']
 y = output_set['train']
 #
@@ -87,7 +87,7 @@ for i in range(2, MAX_DEGREE + 1):
 # plt.show()
 
 
-def SGD(X, y, epochs, weights, alpha):
+def SGD(X, y, epochs, weights, alpha, plot_at_epoch=None):
     N = example_set['train'].shape[0]
     train_mse = []
     valid_mse = []
@@ -110,7 +110,7 @@ def SGD(X, y, epochs, weights, alpha):
     return weights, train_mse, valid_mse
 
 
-weights, train_mse, valid_mse = SGD(X, y, EPOCHS, weights, ALPHA)
+weights, train_mse, valid_mse = SGD(X, y, EPOCHS, weights_original.copy(), ALPHA)
 
 # plt.figure(1)
 # plt.plot(np.arange(0, EPOCHS, 1), train_mse, label='train')
@@ -120,7 +120,7 @@ weights, train_mse, valid_mse = SGD(X, y, EPOCHS, weights, ALPHA)
 # plt.xlabel('Epochs')
 # plt.ylabel('MSE')
 # plt.ylim(ymin=0, ymax=2.5)
-
+#
 # '''
 # Part 2) Choose best step size ALPHA using validation data
 # '''
@@ -151,7 +151,7 @@ weights, train_mse, valid_mse = SGD(X, y, EPOCHS, weights, ALPHA)
 # plt.ylim(ymax=0.09)
 # plt.xlim([-0.00001, 0.0004])
 # print(best_alpha)
-
+#
 # # Decision boundary x axis
 # x_axis = pd.DataFrame(np.ones(GRANULARITY))
 # x_axis[1] = np.arange(0, 2, 2 / GRANULARITY)

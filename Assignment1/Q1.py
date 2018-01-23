@@ -24,6 +24,7 @@ Part 1: Fit 20 degree polynomial
 '''
 MAX_DEGREE = 20
 
+# Preprocessing
 for key in example_set:
     # example_set[key].sort_values(by=[0], inplace=True)
     # Separate y from features

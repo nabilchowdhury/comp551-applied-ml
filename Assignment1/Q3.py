@@ -107,3 +107,5 @@ plt.figure(1)
 plt.plot(np.arange(0, 1, 1/INCREMENTS), MSE_vs_lambda)
 
 plt.show()
+
+# Use lasso for feature selection
