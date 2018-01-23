@@ -58,7 +58,7 @@ print('normaleq weights:', weights_normal)
 Try gradient descent first for fun
 '''
 ALPHA = 1e-6
-EPOCHS = 100
+EPOCHS = 10000
 
 weights = np.random.uniform(high=5., size=[MAX_DEGREE + 1])
 
@@ -91,27 +91,37 @@ weights, train_mse, valid_mse = SGD(X, y, EPOCHS, weights, ALPHA)
 plt.figure(1)
 plt.plot(np.arange(0, EPOCHS, 1), train_mse, label='train')
 plt.plot(np.arange(0, EPOCHS, 1), valid_mse, label='valid')
-plt.title('Learning curve for Train and Valid')
+plt.title('Part 1: Learning curve for Train and Valid')
 plt.legend()
 plt.xlabel('Epochs')
 plt.ylabel('MSE')
-
 
 '''
 Part 2) Choose best step size ALPHA using validation data
 '''
 best_alpha = -1
 lowest_mse = 99999
-for i in range(6):
-    cur_alpha = pow(1, -i)
+alphas = [1e-6, 5e-6, 1e-5, 5e-5, 1e-4, 5e-4, 1e-3, 5e-3, 1e-2, 5e-2]
+MSEs = []
+
+for cur_alpha in alphas:
+    print('curalpha:', cur_alpha)
     weights = np.random.uniform(high=5., size=[MAX_DEGREE + 1])
     weights, _, _ = SGD(X, y, EPOCHS, weights, cur_alpha)
     mse_for_valid = mean_square_error(example_set['valid'], output_set['valid'], weights)
     print(mse_for_valid)
     print(weights)
+    alphas.append(cur_alpha)
+    MSEs.append(mse_for_valid)
     if mse_for_valid < lowest_mse:
         lowest_mse = mse_for_valid
         best_alpha = cur_alpha
+
+plt.figure(2)
+plt.plot(alphas, MSEs)
+plt.title('Part 2: Step size (alpha) vs MSE for Valid')
+plt.xlabel('Step size (alpha)')
+plt.ylabel('MSE')
 
 # # Decision boundary x axis
 # x_axis = pd.DataFrame(np.ones(GRANULARITY))
@@ -123,3 +133,5 @@ for i in range(6):
 # plt.scatter(example_set['train'][1], output_set['train'])
 # plt.plot(x_axis[1], decision_boundary, 'y--')
 # plt.show()
+
+plt.show()
