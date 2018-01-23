@@ -15,7 +15,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %----------------------------------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%   PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
 \documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
@@ -51,12 +51,12 @@
 
 
 %----------------------------------------------------------------------------------------
-%	TITLE SECTION
+%   TITLE SECTION
 %----------------------------------------------------------------------------------------
 
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
 
-\title{	
+\title{ 
 \normalfont \normalsize 
 \textsc{McGill University} \\ [25pt] % Your university, school and/or department name(s)
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
@@ -77,7 +77,7 @@
 \maketitle % Print the title
 
 %--------------
-%	PROBLEM 1
+%   PROBLEM 1
 %--------------
 
 \section{Model Selection}
@@ -89,13 +89,13 @@ Applying the closed form solution  \(w = (X^TX)^{-1}X^Ty\) yields the least-squa
 
 \begin{center}
 \begin{tabular}{ |c|c| } 
-	\hline
-	\textbf{Set} & \textbf{MSE} \\ 
-	\hline
-	Train & 7.15259 \\
-	Valid & 458.64632 \\ 
-	Test & 17.25163 \\
-	\hline
+    \hline
+    \textbf{Set} & \textbf{MSE} \\ 
+    \hline
+    Train & 7.15259 \\
+    Valid & 458.64632 \\ 
+    Test & 17.25163 \\
+    \hline
 \end{tabular}
 \end{center}
 
@@ -134,12 +134,12 @@ The optimum \(\lambda\), based on the lowest MSE of the validation set is 0.0197
 
 \begin{center}
 \begin{tabular}{ |c|c| } 
-	\hline
-	\textbf{Set} & \textbf{MSE} \\ 
-	\hline
-	Valid & 9.13508 \\ 
-	Test & 10.73230 \\
-	\hline
+    \hline
+    \textbf{Set} & \textbf{MSE} \\ 
+    \hline
+    Valid & 9.13508 \\ 
+    Test & 10.73230 \\
+    \hline
 \end{tabular}
 \end{center}
 
@@ -156,12 +156,56 @@ We can also visualize this regularized fit on the test set:
 Observing the regularized fit of the model indicates two sharp bends (at the ends), with approximately 3 slight bends in between. This indicates that a 6\textsuperscript{th} degree polynomial is a good estimate of the source polynomial.
 
 %--------------
-%	PROBLEM 2
+%   PROBLEM 2
 %--------------
 
 \section{Gradient Descent For Regression}
 %--------------
 \subsection{Fitting a linear regression model using Stochastic Gradient Descent}
 
+Dataset-2 provides us with a real-valued scalar as input and a real-valued scalar as output. Using Stochastic Gradient Descent (SGD) with a step size \(\alpha\) of \(10^{-6}\) yields the following learning curve:
+
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p1.png}
+    \caption{Epoch vs MSE at \(\alpha=10^{-6}\)}
+    \label{fig:q2p1}
+\end{figure}
+
+\subsection{Finding the best step size}
+The following step sizes were tested to determine which step size yielded the best results for the validation set:  \(10^{-6}, 2\times10^{-6}\, 10^{-5}, 2\times10^{-5}\, 10^{-4}, 2\times10^{-4}\, 10^{-3}, 2\times10^{-3}\, 10^{-2}, 2\times10^{-2}\). Based on these values, the best \(\alpha\) was found to be \(10^{-5}\). 
+
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p2.png}
+    \caption{\(\alpha\) vs MSE for the Validation set}
+    \label{fig:q2p2}
+\end{figure}
+
+\subsection{Evolution of the regression fit during training}
+The following figures show the progression of SGD at 0, 2000, 4000, 6000 and 8000 epochs.
+
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p31.png}
+    \caption{Fit with randomly initialized weights}
+    \label{fig:q2p31}
+    \includegraphics[width=\linewidth]{q2p32.png}
+    \caption{SGD makes large jump towards optimum weights}
+    \label{fig:q2p32}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p33.png}
+    \caption{SGD starts taking smaller steps towards optimum}
+    \label{fig:q2p33}
+    \includegraphics[width=\linewidth]{q2p34.png}
+    \caption{At 6000 epochs}
+    \label{fig:q2p34}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p35.png}
+    \caption{Near the end of training}
+    \label{fig:q2p35}
+    \includegraphics[width=\linewidth]{q2p36.png}
+    \caption{End of training}
+    \label{fig:q2p36}
+\end{figure}
 
 \end{document}

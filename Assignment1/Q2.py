@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import random
 
 '''
 2) Gradient Descent for Regression
@@ -57,11 +58,12 @@ print('normaleq weights:', weights_normal)
 '''
 Try gradient descent first for fun
 '''
-ALPHA = 1e-6
-EPOCHS = 10000
+ALPHA = 1e-5
+EPOCHS = 20000
 
-weights = np.random.uniform(high=5., size=[MAX_DEGREE + 1])
-
+# weights = np.random.uniform(high=10., size=[MAX_DEGREE + 1])
+weights = np.array([4., 7.], dtype=np.float64)
+print('weghts oggg', weights)
 X = example_set['train']
 y = output_set['train']
 #
@@ -73,11 +75,33 @@ y = output_set['train']
 Stochastic gradient descent
 '''
 
+# Decision boundary x axis
+x_axis = pd.DataFrame(np.ones(GRANULARITY))
+x_axis[1] = np.arange(0, 2, 2 / GRANULARITY)
+for i in range(2, MAX_DEGREE + 1):
+    x_axis[i] = pow(x_axis[1], i)
+
+# decision_boundary = np.matmul(x_axis, weights_opt)
+# plt.scatter(example_set['train'][1], output_set['train'])
+# plt.plot(x_axis[1], decision_boundary, 'y--')
+# plt.show()
+
+
 def SGD(X, y, epochs, weights, alpha):
     N = example_set['train'].shape[0]
     train_mse = []
     valid_mse = []
     for epoch in range(epochs):
+        if epoch % 2000 == 0:
+            decision_boundary = np.matmul(x_axis, weights)
+            plt.scatter(X[:, 1], y, s=10)
+            plt.plot(x_axis[1], decision_boundary, 'r--')
+            plt.title('Part 3: Fit after ' + str(epoch) + ' epochs')
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.ylim(ymin=0, ymax=12)
+            plt.xlim(xmax=1.6)
+            plt.show()
         for i in range(N):
             weights = weights - alpha * (np.sum((X[i] * weights)) - y[i]) * X[i]
         train_mse.append(mean_square_error(X, y, weights))
@@ -88,40 +112,45 @@ def SGD(X, y, epochs, weights, alpha):
 
 weights, train_mse, valid_mse = SGD(X, y, EPOCHS, weights, ALPHA)
 
-plt.figure(1)
-plt.plot(np.arange(0, EPOCHS, 1), train_mse, label='train')
-plt.plot(np.arange(0, EPOCHS, 1), valid_mse, label='valid')
-plt.title('Part 1: Learning curve for Train and Valid')
-plt.legend()
-plt.xlabel('Epochs')
-plt.ylabel('MSE')
+# plt.figure(1)
+# plt.plot(np.arange(0, EPOCHS, 1), train_mse, label='train')
+# plt.plot(np.arange(0, EPOCHS, 1), valid_mse, label='valid')
+# plt.title('Part 1: Learning curve for Train and Valid')
+# plt.legend()
+# plt.xlabel('Epochs')
+# plt.ylabel('MSE')
+# plt.ylim(ymin=0, ymax=2.5)
 
-'''
-Part 2) Choose best step size ALPHA using validation data
-'''
-best_alpha = -1
-lowest_mse = 99999
-alphas = [1e-6, 5e-6, 1e-5, 5e-5, 1e-4, 5e-4, 1e-3, 5e-3, 1e-2, 5e-2]
-MSEs = []
-
-for cur_alpha in alphas:
-    print('curalpha:', cur_alpha)
-    weights = np.random.uniform(high=5., size=[MAX_DEGREE + 1])
-    weights, _, _ = SGD(X, y, EPOCHS, weights, cur_alpha)
-    mse_for_valid = mean_square_error(example_set['valid'], output_set['valid'], weights)
-    print(mse_for_valid)
-    print(weights)
-    alphas.append(cur_alpha)
-    MSEs.append(mse_for_valid)
-    if mse_for_valid < lowest_mse:
-        lowest_mse = mse_for_valid
-        best_alpha = cur_alpha
-
-plt.figure(2)
-plt.plot(alphas, MSEs)
-plt.title('Part 2: Step size (alpha) vs MSE for Valid')
-plt.xlabel('Step size (alpha)')
-plt.ylabel('MSE')
+# '''
+# Part 2) Choose best step size ALPHA using validation data
+# '''
+# best_alpha = -1
+# lowest_mse = 99999
+# alphas = [1e-6, 2e-6, 1e-5, 2e-5, 1e-4, 2e-4, 1e-3, 2e-3, 1e-2, 2e-2]
+# MSEs = []
+# # weights_og = np.random.uniform(high=10., size=[MAX_DEGREE + 1])
+# weights_og = np.array([6.85035978, 8.34571567], dtype=np.float64)
+# # print('weghts og', weights_og)
+# for cur_alpha in alphas:
+#     print('cur alpha:', cur_alpha)
+#     weights, _, _ = SGD(X, y, EPOCHS, weights_og.copy(), cur_alpha)
+#     mse_for_valid = mean_square_error(example_set['valid'], output_set['valid'], weights)
+#     print(mse_for_valid)
+#     print(weights)
+#     MSEs.append(mse_for_valid)
+#     if mse_for_valid < lowest_mse:
+#         lowest_mse = mse_for_valid
+#         best_alpha = cur_alpha
+#
+# plt.figure(2)
+# plt.plot(alphas, MSEs, 'ro')
+# plt.plot(alphas, MSEs, 'r--')
+# plt.title('Part 2: Step size (alpha) vs MSE for Valid')
+# plt.xlabel('Step size (alpha)')
+# plt.ylabel('MSE')
+# plt.ylim(ymax=0.09)
+# plt.xlim([-0.00001, 0.0004])
+# print(best_alpha)
 
 # # Decision boundary x axis
 # x_axis = pd.DataFrame(np.ones(GRANULARITY))
