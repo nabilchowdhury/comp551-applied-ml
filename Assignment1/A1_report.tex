@@ -113,6 +113,7 @@ A closer look at the training plot shows oscillations in the fit (i.e. it is try
     \includegraphics[width=\linewidth]{q1p12.png}
     \caption{Fits training set well}
     \label{fig:q1p12}
+    \vspace{0.5cm}
     \includegraphics[width=\linewidth]{q1p13.png}
     \caption{Fit does not generalize well to validation set}
     \label{fig:q1p13}
@@ -135,19 +136,24 @@ The optimum \(\lambda\), based on the lowest MSE of the validation set is 0.0197
 \begin{center}
 \begin{tabular}{ |c|c| } 
     \hline
-    \textbf{Set} & \textbf{MSE} \\ 
+    \textbf{Set} & \textbf{MSE with \(\lambda = 0.0197\)} \\ 
     \hline
+    Train & 8.85645 \\
     Valid & 9.13508 \\ 
     Test & 10.73230 \\
     \hline
 \end{tabular}
 \end{center}
 
-We can also visualize this regularized fit on the test set:
+We can also visualize this regularized fit on the validation and test sets:
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{q1p15.png}
-    \caption{Fit of 20-degree polynomial with optimum lambda}
+    \caption{Fit of 20-degree polynomial on validation set with optimal lambda}
+    \label{fig:q1p15}
+    \vspace{0.5cm}
+    \includegraphics[width=\linewidth]{q1p16.png}
+    \caption{Fit of 20-degree polynomial on test set with optimal lambda}
     \label{fig:q1p15}
 \end{figure}
 
@@ -170,9 +176,20 @@ Dataset-2 provides us with a real-valued scalar as input and a real-valued scala
     \caption{Epoch vs MSE at \(\alpha=10^{-6}\)}
     \label{fig:q2p1}
 \end{figure}
+\begin{center}
+\begin{tabular}{ |c|c| } 
+    \hline
+    \textbf{Set} & \textbf{Final MSE at \(\alpha = 10^{-6}\)} \\ 
+    \hline
+    Train & 0.10277 \\
+    Valid & 0.07558 \\ 
+    Test & 0.08120 \\
+    \hline
+\end{tabular}
+\end{center}
 
 \subsection{Finding the best step size}
-The following step sizes were tested to determine which step size yielded the best results for the validation set:  \(10^{-6}, 2\times10^{-6}\, 10^{-5}, 2\times10^{-5}\, 10^{-4}, 2\times10^{-4}\, 10^{-3}, 2\times10^{-3}\, 10^{-2}, 2\times10^{-2}\). Based on these values, the best \(\alpha\) was found to be \(10^{-5}\). 
+The following step sizes were tested to determine which step size yielded the best results for the validation set:  \(10^{-6}, 5\times10^{-6}, 10^{-5}, 5\times10^{-5}, 10^{-4}, 5\times10^{-4}, 10^{-3}, 5\times10^{-3}, 10^{-2}, 5\times10^{-2}\). Based on these values, the best \(\alpha\) was found to be \(5\times10^{-6}\). 
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{q2p2.png}
@@ -180,8 +197,22 @@ The following step sizes were tested to determine which step size yielded the be
     \label{fig:q2p2}
 \end{figure}
 
+The MSE for all three sets using the optimal \(\alpha\) value of \(5\times10^{-6}\) is:
+\begin{center}
+\begin{tabular}{ |c|c| } 
+    \hline
+    \textbf{Set} & \textbf{Final MSE at \(\alpha = 5\times10^{-6}\)} \\
+    \hline
+    Train &  0.09606 \\
+    Valid & 0.07289 \\ 
+    Test & 0.07099 \\
+    \hline
+\end{tabular}
+\end{center}
+As we can see, the MSEs at \(\alpha = 5\times10^{-6}\) are lower than at  \(\alpha = 10^{-6}\) 
+
 \subsection{Evolution of the regression fit during training}
-The following figures show the progression of SGD at 0, 2000, 4000, 6000 and 8000 epochs.
+The following figures show the progression of SGD at 0, 800, 1600, 2400, 3200 and 4000 epochs (using \(\alpha\ = 5\times10^{-6}\)).
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{q2p31.png}
@@ -207,5 +238,16 @@ The following figures show the progression of SGD at 0, 2000, 4000, 6000 and 800
     \caption{End of training}
     \label{fig:q2p36}
 \end{figure}
+
+\section{Real-life dataset}
+\subsection{Fill in missing values}
+The mean is a good filler for missing values if that particular attribute is continuous numerical. The mode may be a better choice for categorical/ordinal data, since the mean may produce a decimal value that does not fit any of the categories. \\
+Since most of the features of this dataset are numeric decimal (i.e. continuous), the mean of each feature is a good choice to fill in missing entries for that particular feature.
+
+\subsection{Fitting the model}
+
+
+
+
 
 \end{document}
