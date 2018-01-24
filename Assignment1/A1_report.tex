@@ -15,7 +15,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %----------------------------------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%   PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
 \documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
@@ -51,12 +51,12 @@
 
 
 %----------------------------------------------------------------------------------------
-%	TITLE SECTION
+%   TITLE SECTION
 %----------------------------------------------------------------------------------------
 
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
 
-\title{	
+\title{ 
 \normalfont \normalsize 
 \textsc{McGill University} \\ [25pt] % Your university, school and/or department name(s)
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
@@ -77,7 +77,7 @@
 \maketitle % Print the title
 
 %--------------
-%	PROBLEM 1
+%   PROBLEM 1
 %--------------
 
 \section{Model Selection}
@@ -89,13 +89,13 @@ Applying the closed form solution  \(w = (X^TX)^{-1}X^Ty\) yields the least-squa
 
 \begin{center}
 \begin{tabular}{ |c|c| } 
-	\hline
-	\textbf{Set} & \textbf{MSE} \\ 
-	\hline
-	Train & 7.15259 \\
-	Valid & 458.64632 \\ 
-	Test & 17.25163 \\
-	\hline
+    \hline
+    \textbf{Set} & \textbf{MSE} \\ 
+    \hline
+    Train & 7.15259 \\
+    Valid & 458.64632 \\ 
+    Test & 17.25163 \\
+    \hline
 \end{tabular}
 \end{center}
 
@@ -113,6 +113,7 @@ A closer look at the training plot shows oscillations in the fit (i.e. it is try
     \includegraphics[width=\linewidth]{q1p12.png}
     \caption{Fits training set well}
     \label{fig:q1p12}
+    \vspace{0.5cm}
     \includegraphics[width=\linewidth]{q1p13.png}
     \caption{Fit does not generalize well to validation set}
     \label{fig:q1p13}
@@ -134,20 +135,25 @@ The optimum \(\lambda\), based on the lowest MSE of the validation set is 0.0197
 
 \begin{center}
 \begin{tabular}{ |c|c| } 
-	\hline
-	\textbf{Set} & \textbf{MSE} \\ 
-	\hline
-	Valid & 9.13508 \\ 
-	Test & 10.73230 \\
-	\hline
+    \hline
+    \textbf{Set} & \textbf{MSE with \(\lambda = 0.0197\)} \\ 
+    \hline
+    Train & 8.85645 \\
+    Valid & 9.13508 \\ 
+    Test & 10.73230 \\
+    \hline
 \end{tabular}
 \end{center}
 
-We can also visualize this regularized fit on the test set:
+We can also visualize this regularized fit on the validation and test sets:
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{q1p15.png}
-    \caption{Fit of 20-degree polynomial with optimum lambda}
+    \caption{Fit of 20-degree polynomial on validation set with optimal lambda}
+    \label{fig:q1p15}
+    \vspace{0.5cm}
+    \includegraphics[width=\linewidth]{q1p16.png}
+    \caption{Fit of 20-degree polynomial on test set with optimal lambda}
     \label{fig:q1p15}
 \end{figure}
 
@@ -156,12 +162,92 @@ We can also visualize this regularized fit on the test set:
 Observing the regularized fit of the model indicates two sharp bends (at the ends), with approximately 3 slight bends in between. This indicates that a 6\textsuperscript{th} degree polynomial is a good estimate of the source polynomial.
 
 %--------------
-%	PROBLEM 2
+%   PROBLEM 2
 %--------------
 
 \section{Gradient Descent For Regression}
 %--------------
 \subsection{Fitting a linear regression model using Stochastic Gradient Descent}
+
+Dataset-2 provides us with a real-valued scalar as input and a real-valued scalar as output. Using Stochastic Gradient Descent (SGD) with a step size \(\alpha\) of \(10^{-6}\) yields the following learning curve:
+
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p1.png}
+    \caption{Epoch vs MSE at \(\alpha=10^{-6}\)}
+    \label{fig:q2p1}
+\end{figure}
+\begin{center}
+\begin{tabular}{ |c|c| } 
+    \hline
+    \textbf{Set} & \textbf{Final MSE at \(\alpha = 10^{-6}\)} \\ 
+    \hline
+    Train & 0.10277 \\
+    Valid & 0.07558 \\ 
+    Test & 0.08120 \\
+    \hline
+\end{tabular}
+\end{center}
+
+\subsection{Finding the best step size}
+The following step sizes were tested to determine which step size yielded the best results for the validation set:  \(10^{-6}, 5\times10^{-6}, 10^{-5}, 5\times10^{-5}, 10^{-4}, 5\times10^{-4}, 10^{-3}, 5\times10^{-3}, 10^{-2}, 5\times10^{-2}\). Based on these values, the best \(\alpha\) was found to be \(5\times10^{-6}\). 
+
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p2.png}
+    \caption{\(\alpha\) vs MSE for the Validation set}
+    \label{fig:q2p2}
+\end{figure}
+
+The MSE for all three sets using the optimal \(\alpha\) value of \(5\times10^{-6}\) is:
+\begin{center}
+\begin{tabular}{ |c|c| } 
+    \hline
+    \textbf{Set} & \textbf{Final MSE at \(\alpha = 5\times10^{-6}\)} \\
+    \hline
+    Train &  0.09606 \\
+    Valid & 0.07289 \\ 
+    Test & 0.07099 \\
+    \hline
+\end{tabular}
+\end{center}
+As we can see, the MSEs at \(\alpha = 5\times10^{-6}\) are lower than at  \(\alpha = 10^{-6}\) 
+
+\subsection{Evolution of the regression fit during training}
+The following figures show the progression of SGD at 0, 800, 1600, 2400, 3200 and 4000 epochs (using \(\alpha\ = 5\times10^{-6}\)).
+
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p31.png}
+    \caption{Fit with randomly initialized weights}
+    \label{fig:q2p31}
+    \includegraphics[width=\linewidth]{q2p32.png}
+    \caption{SGD makes large jump towards optimum weights}
+    \label{fig:q2p32}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p33.png}
+    \caption{SGD starts taking smaller steps towards optimum}
+    \label{fig:q2p33}
+    \includegraphics[width=\linewidth]{q2p34.png}
+    \caption{At 6000 epochs}
+    \label{fig:q2p34}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q2p35.png}
+    \caption{Near the end of training}
+    \label{fig:q2p35}
+    \includegraphics[width=\linewidth]{q2p36.png}
+    \caption{End of training}
+    \label{fig:q2p36}
+\end{figure}
+
+\section{Real-life dataset}
+\subsection{Fill in missing values}
+The mean is a good filler for missing values if that particular attribute is continuous numerical. The mode may be a better choice for categorical/ordinal data, since the mean may produce a decimal value that does not fit any of the categories. \\
+Since most of the features of this dataset are numeric decimal (i.e. continuous), the mean of each feature is a good choice to fill in missing entries for that particular feature.
+
+\subsection{Fitting the model}
+
+
+
 
 
 \end{document}
