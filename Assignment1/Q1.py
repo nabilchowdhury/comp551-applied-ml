@@ -94,7 +94,7 @@ def visualize(W, visualize_all=False, X=None, y=None, title_for_all="", title_fo
     :param save_x_as: Save the plot generated for input X and associated output y
     '''
     global x_axis
-    decision_boundary = np.matmul(x_axis, W)
+    model_fit = np.matmul(x_axis, W)
 
     # Visualize fit on all three sets of data
     fig_no = 1
@@ -104,7 +104,7 @@ def visualize(W, visualize_all=False, X=None, y=None, title_for_all="", title_fo
         for i, key in enumerate(example_set, 1):
             plt.subplot(len(example_set), 1, i)
             plt.scatter(example_set[key][:, 1], output_set[key])
-            plt.plot(x_axis[1], decision_boundary, 'r--')
+            plt.plot(x_axis[1], model_fit, 'r--')
             plt.title(title_for_all + ": " + key.upper())
             plt.xlabel('x')
             plt.ylabel('y')
@@ -116,7 +116,7 @@ def visualize(W, visualize_all=False, X=None, y=None, title_for_all="", title_fo
     if not(X is None or y is None):
         plt.figure(fig_no, figsize=FIGSIZE)
         plt.scatter(X[:, 1], y)
-        plt.plot(x_axis[1], decision_boundary, 'r--')
+        plt.plot(x_axis[1], model_fit, 'r--')
         plt.title(title_for_x)
         plt.xlabel('x')
         plt.ylabel('y')
