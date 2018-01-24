@@ -7,20 +7,19 @@ import pandas as pd
 '''
 
 df = pd.read_csv('./Datasets/communities.csv', header=None)
-df.drop([i for i in range(5)], axis=1, inplace=True) # These columns are not predictive according to the dataset
-df.columns = [i for i in range(0, df.shape[1])] # Rename columns
+df[0] = 1
+df.drop([i for i in range(1, 5)], axis=1, inplace=True) # These columns are not predictive according to the dataset
+df.columns = [i for i in range(df.shape[1])] # Rename columns
 df = df.replace('?', np.NaN).astype(np.float64)
-# obj_cols = [i for i in range(128) if df.dtypes.iloc[i] == 'object']
-# print(df[obj_cols].head())
 
 '''
 Part 1) Fill in missing values 
 '''
 df.fillna(df.mean(), inplace=True)
-
+# print(df.columns[df.isnull().any()].tolist())
 
 N_examples = df.shape[0]
-M_rows = df.shape[1]
+M_cols = df.shape[1]
 
 data = np.array(df, dtype=np.float64)
 
@@ -39,6 +38,24 @@ def fit(X, y, lambda_reg=0):
 
     return weights
 
+# Gradient descent
+def gradient_descent(X, y, lambda_reg=0, alpha=1e-2, epochs=5000, weights=None):
+    '''
+    Implementation of vectorized gradient descent with L2 regularization support
+    :param X: The input matrix N x M, where each row is an example
+    :param y: The output, N x 1
+    :param lambda_reg: Regularization hyperparamter (0 means no regularization)
+    :param alpha: Learning rate
+    :param epochs: Number of cycles over training data
+    :param weights: Initial weights can be supplied if desired
+    :return: The optimal weights after gradient descent
+    '''
+    weights = weights if weights is not None else np.random.uniform(high=10, size=[M_cols - 1])
+    N = len(X)
+    for epoch in range(epochs):
+        weights = weights - alpha / N * ( np.matmul(np.transpose(X), np.matmul(X, weights) - y) + lambda_reg * weights)
+
+    return weights
 
 def mean_square_error(X, y, W):
     y_hat = np.matmul(X, W)
@@ -51,9 +68,13 @@ def cross_validation_split(X, n_folds=5, filename="file", write_to_csv=False):
     N = len(X) // 5
     pairs = []
     for i in range(n_folds):
-        fold_train1 = X[0:i*N]
-        fold_test = X[i*N:(i+1)*N]
-        fold_train2 = X[(i+1)*N:]
+        fold_train1 = X[0:i * N]
+        if i < n_folds - 1:
+            fold_test = X[i*N:(i+1)*N]
+            fold_train2 = X[(i+1)*N:]
+        else:
+            fold_test = X[i*N:]
+            fold_train2 = X[N:N]
 
         df_train = pd.DataFrame(np.concatenate((fold_train1, fold_train2)))
         df_test = pd.DataFrame(fold_test)
@@ -69,43 +90,62 @@ def cross_validation_split(X, n_folds=5, filename="file", write_to_csv=False):
 
 # Generate the files for 5-fold cross-validation
 splits = cross_validation_split(data, 5, 'CandC', False)
-
-MSEs = []
+LAMBDA_REG = 1e-5
+MSEs_closed_form = []
 all_weights = []
 for pair in splits:
-    X_train = pair['train'].drop([M_rows - 1], axis=1)
-    y_train = pair['train'][M_rows-1]
-    X_test = pair['test'].drop([M_rows - 1], axis=1)
-    y_test = pair['test'][M_rows - 1]
+    X_train = pair['train'].drop([M_cols - 1], axis=1)
+    y_train = pair['train'][M_cols-1]
+    X_test = pair['test'].drop([M_cols - 1], axis=1)
+    y_test = pair['test'][M_cols - 1]
 
-    weights = fit(X_train, y_train)
-    MSEs.append(mean_square_error(X_test, y_test, weights))
+    weights = fit(X_train, y_train, lambda_reg=LAMBDA_REG)
+    MSEs_closed_form.append(mean_square_error(X_test, y_test, weights))
     all_weights.append(weights)
 
-print(np.average(MSEs))
 
-'''
-Part 3) Ridge-regression
-'''
-INCREMENTS = 1000
-MSE_vs_lambda = []
-for i in range(INCREMENTS):
+MSEs_gd = []
+all_weights_gd = []
+weights = np.random.uniform(high=10., size=[M_cols - 1])
+for pair in splits:
+    X_train = pair['train'].drop([M_cols - 1], axis=1)
+    y_train = pair['train'][M_cols - 1]
+    X_test = pair['test'].drop([M_cols - 1], axis=1)
+    y_test = pair['test'][M_cols - 1]
 
-    cur_mse = 0
-    for pair in splits:
-        X_train = pair['train'].drop([M_rows - 1], axis=1)
-        y_train = pair['train'][M_rows - 1]
-        X_test = pair['test'].drop([M_rows - 1], axis=1)
-        y_test = pair['test'][M_rows - 1]
+    weights_gd = gradient_descent(np.array(X_train), np.array(y_train), epochs=20000, weights=np.copy(weights), lambda_reg=LAMBDA_REG)
+    MSEs_gd.append(mean_square_error(X_test, y_test, weights_gd))
+    all_weights_gd.append(weights_gd)
 
-        weights = fit(X_train, y_train, 1 / INCREMENTS * i)
-        cur_mse += mean_square_error(X_test, y_test, weights)
 
-    MSE_vs_lambda.append(cur_mse / len(splits))
+print('least squares:', np.average(MSEs_closed_form))
+print('gradient descent:', np.average(MSEs_gd))
 
-plt.figure(1)
-plt.plot(np.arange(0, 1, 1/INCREMENTS), MSE_vs_lambda)
+# print(all_weights[0])
+# print(all_weights_gd[0])
 
-plt.show()
-
-# Use lasso for feature selection
+# '''
+# Part 3) Ridge-regression: Using only least-squares closed form solution for this part.
+# '''
+# INCREMENTS = 1000
+# MSE_vs_lambda = []
+# for i in range(INCREMENTS):
+#
+#     cur_mse = 0
+#     for pair in splits:
+#         X_train = pair['train'].drop([M_cols - 1], axis=1)
+#         y_train = pair['train'][M_cols - 1]
+#         X_test = pair['test'].drop([M_cols - 1], axis=1)
+#         y_test = pair['test'][M_cols - 1]
+#
+#         weights = fit(X_train, y_train, 1 / INCREMENTS * i)
+#         cur_mse += mean_square_error(X_test, y_test, weights)
+#
+#     MSE_vs_lambda.append(cur_mse / len(splits))
+#
+# plt.figure(1)
+# plt.plot(np.arange(0, 1, 1/INCREMENTS), MSE_vs_lambda)
+#
+# plt.show()
+# #
+# # Use lasso for feature selection

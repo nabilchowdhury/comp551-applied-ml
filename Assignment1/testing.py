@@ -2,7 +2,5 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-alphas = [(pow(10, -i), 5 * pow(10, -i)) for i in range(7)]
-alphas = [item for sublist in alphas for item in sublist]
-
-print(np.sum(np.square(np.array([1,2,3]))))
+X = np.array([[1,2,3], [4,5,6], [7,8,9]])
+print(X[2:3])

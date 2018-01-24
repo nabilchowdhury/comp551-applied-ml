@@ -80,7 +80,7 @@ print('Least Squares weights:', weights_normal)
 Define algorithm parameters
 '''
 ALPHA = 1e-6 # step size
-EPOCHS = 10001 # iterations over all examples
+EPOCHS = 20001 # iterations over all examples
 
 # x axis for fit curve
 x_axis = pd.DataFrame(np.ones(GRANULARITY))
@@ -146,8 +146,9 @@ Try gradient descent first just for fun with ALPHA=1e-3
 '''
 # Copy of randomly initialized weights
 weights_GD = np.copy(weights_original)
+N = len(X)
 for epoch in range(EPOCHS):
-    weights_GD = weights_GD - 1e-3 * np.matmul(np.transpose(X), np.matmul(X, weights_GD) - y)
+    weights_GD = weights_GD - 1e-2 / N * np.matmul(np.transpose(X), np.matmul(X, weights_GD) - y)
 
 # We can see that Gradient descent gives us the same results as np.polyfit and our closed form least-squares solution
 print('Weights from Gradient Descent:', weights_GD)
