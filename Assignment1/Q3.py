@@ -124,28 +124,34 @@ print('gradient descent:', np.average(MSEs_gd))
 # print(all_weights[0])
 # print(all_weights_gd[0])
 
-# '''
-# Part 3) Ridge-regression: Using only least-squares closed form solution for this part.
-# '''
-# INCREMENTS = 1000
-# MSE_vs_lambda = []
-# for i in range(INCREMENTS):
-#
-#     cur_mse = 0
-#     for pair in splits:
-#         X_train = pair['train'].drop([M_cols - 1], axis=1)
-#         y_train = pair['train'][M_cols - 1]
-#         X_test = pair['test'].drop([M_cols - 1], axis=1)
-#         y_test = pair['test'][M_cols - 1]
-#
-#         weights = fit(X_train, y_train, 1 / INCREMENTS * i)
-#         cur_mse += mean_square_error(X_test, y_test, weights)
-#
-#     MSE_vs_lambda.append(cur_mse / len(splits))
-#
+'''
+Part 3) Ridge-regression: Using only least-squares closed form solution for this part.
+'''
+INCREMENTS = 1000
+MSE_vs_lambda = []
+weights_for_lambda = []
+
+for i in range(INCREMENTS):
+
+    cur_mse = 0
+    weights_for_folds = []
+    for pair in splits:
+        X_train = pair['train'].drop([M_cols - 1], axis=1)
+        y_train = pair['train'][M_cols - 1]
+        X_test = pair['test'].drop([M_cols - 1], axis=1)
+        y_test = pair['test'][M_cols - 1]
+
+        weights = fit(X_train, y_train, 1 / INCREMENTS * i)
+        cur_mse += mean_square_error(X_test, y_test, weights)
+        weights_for_folds.append(weights)
+    MSE_vs_lambda.append(cur_mse / len(splits))
+    weights_for_lambda.append(weights_for_folds)
+
+print(MSE_vs_lambda[:10])
+
 # plt.figure(1)
 # plt.plot(np.arange(0, 1, 1/INCREMENTS), MSE_vs_lambda)
 #
 # plt.show()
-# #
-# # Use lasso for feature selection
+#
+# Use lasso for feature selection
