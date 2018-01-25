@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import random
 
 '''
 2) Gradient Descent for Regression
@@ -159,7 +158,6 @@ print()
 Stochastic gradient descent
 '''
 
-
 def plot(X, y, x_axis, weights, epoch):
     '''
     Helper for plotting updates during SGD
@@ -175,7 +173,6 @@ def plot(X, y, x_axis, weights, epoch):
     plt.show()
 
 def SGD(X, y, epochs, weights, alpha, plot_at_epoch=None):
-    print('Weights at start:', weights)
     '''
     Returns the optimal weights, train MSE and valid MSE for the dataset.
     :param X: The training set N x M
