@@ -90,7 +90,7 @@ def cross_validation_split(X, n_folds=5, filename="file", write_to_csv=False):
 
 # Generate the files for 5-fold cross-validation
 splits = cross_validation_split(data, 5, 'CandC', False)
-LAMBDA_REG = 1e-5
+# LAMBDA_REG = 1e-5
 MSEs_closed_form = []
 all_weights = []
 for pair in splits:
@@ -99,7 +99,7 @@ for pair in splits:
     X_test = pair['test'].drop([M_cols - 1], axis=1)
     y_test = pair['test'][M_cols - 1]
 
-    weights = fit(X_train, y_train, lambda_reg=LAMBDA_REG)
+    weights = fit(X_train, y_train)
     MSEs_closed_form.append(mean_square_error(X_test, y_test, weights))
     all_weights.append(weights)
 
@@ -113,7 +113,7 @@ for pair in splits:
     X_test = pair['test'].drop([M_cols - 1], axis=1)
     y_test = pair['test'][M_cols - 1]
 
-    weights_gd = gradient_descent(np.array(X_train), np.array(y_train), epochs=20000, weights=np.copy(weights), lambda_reg=LAMBDA_REG)
+    weights_gd = gradient_descent(np.array(X_train), np.array(y_train), epochs=20000, weights=np.copy(weights))
     MSEs_gd.append(mean_square_error(X_test, y_test, weights_gd))
     all_weights_gd.append(weights_gd)
 

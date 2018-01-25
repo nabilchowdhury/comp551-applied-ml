@@ -45,6 +45,8 @@ for i in range(2, MAX_DEGREE + 1):
     for _, df in example_set.items():
         df[i] = np.power(df[1], i)
 
+print(example_set['train'].head())
+
 # Convert to numpy arrays (makes it faster)
 for key in example_set:
     example_set[key] = np.array(example_set[key], dtype=np.float64)
