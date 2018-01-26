@@ -149,12 +149,17 @@ We can also visualize this regularized fit on the validation and test sets:
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{q1p15.png}
-    \caption{Fit of 20-degree polynomial on validation set with optimal lambda}
+    \caption{Fit of 20-degree polynomial on training set with optimal lambda}
     \label{fig:q1p15}
     \vspace{0.5cm}
     \includegraphics[width=\linewidth]{q1p16.png}
+    \caption{Fit of 20-degree polynomial on validation set with optimal lambda}
+    \label{fig:q1p16}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q1p17.png}
     \caption{Fit of 20-degree polynomial on test set with optimal lambda}
-    \label{fig:q1p15}
+    \label{fig:q1p17}
 \end{figure}
 
 \subsection{Estimation of degree of source polynomial}
@@ -169,7 +174,7 @@ Observing the regularized fit of the model indicates two sharp bends (at the end
 %--------------
 \subsection{Fitting a linear regression model using Stochastic Gradient Descent}
 
-Dataset-2 provides us with a real-valued scalar as input and a real-valued scalar as output. Using Stochastic Gradient Descent (SGD) with a step size \(\alpha\) of \(10^{-6}\) yields the following learning curve:
+Dataset-2 provides us with a real-valued scalar as input and a real-valued scalar as output. Using Stochastic Gradient Descent (SGD) with a step size \(\alpha\) of \(10^{-6}\) yields the following learning curve (Note: since the weights are randomly initialized, this will not be the exact curve for every run of the code in the Jupyter Notebook):
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{q2p1.png}
@@ -189,7 +194,7 @@ Dataset-2 provides us with a real-valued scalar as input and a real-valued scala
 \end{center}
 
 \subsection{Finding the best step size}
-The following step sizes were tested to determine which step size yielded the best results for the validation set:  \(10^{-6}, 5\times10^{-6}, 10^{-5}, 5\times10^{-5}, 10^{-4}, 5\times10^{-4}, 10^{-3}, 5\times10^{-3}, 10^{-2}, 5\times10^{-2}\). Based on these values, the best \(\alpha\) was found to be \(5\times10^{-6}\). 
+The following step sizes were tested to determine which step size yielded the best results for the validation set:  \(10^{-6}, 5\times10^{-6}, 10^{-5}, 5\times10^{-5}, 10^{-4}, 5\times10^{-4}, 10^{-3}, 5\times10^{-3}, 10^{-2}, 5\times10^{-2}\). Based on these values and the initial random weights used in 2.1, the best \(\alpha\) was found to be \(5\times10^{-6}\). 
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{q2p2.png}
@@ -241,13 +246,52 @@ The following figures show the progression of SGD at 0, 800, 1600, 2400, 3200 an
 
 \section{Real-life dataset}
 \subsection{Fill in missing values}
-The mean is a good filler for missing values if that particular attribute is continuous numerical. The mode may be a better choice for categorical/ordinal data, since the mean may produce a decimal value that does not fit any of the categories. \\
-Since most of the features of this dataset are numeric decimal (i.e. continuous), the mean of each feature is a good choice to fill in missing entries for that particular feature.
+The mean is a good filler for missing values if that particular attribute is interval or ratio data. Interval data is data that has a definite order and an exact difference, such as temperature. Ratio data is data with an absolutely defined zero, such as the Kelvin scale for temperature. In our case, the attributes are numerical data and thus is a good fit for the mean. The median and mode can also be used on such data. \\
+
+The mean will not work categorical data since categories may not have an exact order (nominal data), and if they do, the distance between subsequent categories may not be definite (ordinal data). For nominal data, the mode is a good candidate for filling in missing values whereas for ordinal data, both the mode and median can be used, since there is notion of order and distance, even though the distance is not exactly known. \\
+
+For this dataset, the mean of each feature (over all examples) was used to fill in missing values. 
 
 \subsection{Fitting the model}
+The data contained 127 attributes, of which the first five were "not predictive" according to the source and so were omitted. Including the bias column added to the dataset, a total of 123 weights were used in the model. The data was shuffled and split into five 80-20 train-test splits. Using both the closed form solution and gradient descent separately on each of the splits, the following MSEs averaged over 5 splits were found:\\
 
+Note: The MSE depends on the random shuffling of the data. This is one result, but all values are similar.
+\begin{center}
+\begin{tabular}{ |c|c| } 
+    \hline
+    \textbf{Algorithm} & \textbf{MSE on test} \\
+    \hline
+    Closed form solution & 0.11375 \\
+    Gradient descent & 0.45150 \\ 
+    \hline
+\end{tabular}
+\end{center}
 
+The weights for each fold calculated by both the closed form and gradient descent are attached in the csv files \texttt{weights\_for\_closed\_form} and \texttt{weights\_for\_gradient\_descent} respectively. Each column represents the weights calculated for each fold.
 
+\subsection{Ridge Regression}
+For this part, only the closed form solution was used, but the code in the Jupyter Notebook supports Ridge Regression for both the closed form and gradient descent. \\
 
+Values of \(\lambda\) between 0 and 5, with increments of 0.05 were tested to find the best \(\lambda\). Again, since the examples are shuffled initially, this value will change from one execution of the code to another. For the shuffle order used for 3.2, the best \(\lambda\) is 1.45, with an average MSE across the five folds (on test set) of 0.01841. This is an improvement from the test MSEs in 3.2. \\
+
+Here is a graph of \(\lambda\) vs MSE:
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{q3p31.png}
+    \caption{\(\lambda\) vs average MSE on test set}
+    \label{fig:q3p31}
+\end{figure}
+
+Using the optimal weights produced by \(\lambda = 1.45\), we can relate Ridge Regression and the importance of certain weights. Weights with magnitudes close to zero contribute less to the prediction than weights with larger magnitudes. By retraining the model with regularization using \(\lambda = 1.45\) and sorting the weights by magnitude, we can observe which weights contribute the least (this was done for each of the five folds and then aggregated). Please see the Jupyter Notebook for implementation details. For this particular run, the number of features dropped by the algorithm was 51, producing better MSE of 0.01792:
+
+\begin{center}
+\begin{tabular}{ |c|c| } 
+    \hline
+    \textbf{No. of features} & \textbf{MSE on test, with \(\lambda = 1.45\)} \\
+    \hline
+    All & 0.01841 \\
+    \textbf{72} &  \textbf{0.01792} \\ 
+    \hline
+\end{tabular}
+\end{center}
 
 \end{document}
