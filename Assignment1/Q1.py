@@ -198,5 +198,6 @@ plt.savefig('q1p14.png')
 plt.show()
 
 # Plot chosen model
-visualize(OPT_WEIGHTS, X=example_set['valid'], y=output_set['valid'], title_for_x='Regularized fit on Validation Set', save_x_as='q1p15.png')
-visualize(OPT_WEIGHTS, X=example_set['test'], y=output_set['test'], title_for_x='Regularized fit on Test Set', save_x_as='q1p16.png')
+visualize(OPT_WEIGHTS, X=example_set['train'], y=output_set['train'], title_for_x='Regularized fit on Training Set', save_x_as='q1p15.png')
+visualize(OPT_WEIGHTS, X=example_set['valid'], y=output_set['valid'], title_for_x='Regularized fit on Validation Set', save_x_as='q1p16.png')
+visualize(OPT_WEIGHTS, X=example_set['test'], y=output_set['test'], title_for_x='Regularized fit on Test Set', save_x_as='q1p17.png')
