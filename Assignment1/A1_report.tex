@@ -145,7 +145,7 @@ The optimum \(\lambda\), based on the lowest MSE of the validation set is 0.0197
 \end{tabular}
 \end{center}
 
-We can also visualize this regularized fit on the validation and test sets:
+We can also visualize this regularized fit on the training, validation and test sets:
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{q1p15.png}
@@ -253,9 +253,9 @@ The mean will not work categorical data since categories may not have an exact o
 For this dataset, the mean of each feature (over all examples) was used to fill in missing values. 
 
 \subsection{Fitting the model}
-The data contained 127 attributes, of which the first five were "not predictive" according to the source and so were omitted. Including the bias column added to the dataset, a total of 123 weights were used in the model. The data was shuffled and split into five 80-20 train-test splits. Using both the closed form solution and gradient descent separately on each of the splits, the following MSEs averaged over 5 splits were found:\\
+The data contained 127 attributes, of which the first five were "not predictive" according to the source, and therefore omitted. Including the bias column added to the dataset, a total of 123 weights were used in the model. The data was shuffled and split into five 80-20 train-test splits. Using both the closed form solution and gradient descent separately on each of the splits, the following MSEs averaged over 5 splits were found:\\
 
-Note: The MSE depends on the random shuffling of the data. This is one result, but all values are similar.
+Note: The MSE depends on the random shuffling of the data. This is one result.
 \begin{center}
 \begin{tabular}{ |c|c| } 
     \hline
@@ -270,7 +270,7 @@ Note: The MSE depends on the random shuffling of the data. This is one result, b
 The weights for each fold calculated by both the closed form and gradient descent are attached in the csv files \texttt{weights\_for\_closed\_form} and \texttt{weights\_for\_gradient\_descent} respectively. Each column represents the weights calculated for each fold.
 
 \subsection{Ridge Regression}
-For this part, only the closed form solution was used, but the code in the Jupyter Notebook supports Ridge Regression for both the closed form and gradient descent. \\
+For this part, only the closed form solution was used, but the code in the Jupyter Notebook supports Ridge Regression for gradient descent as well. \\
 
 Values of \(\lambda\) between 0 and 5, with increments of 0.05 were tested to find the best \(\lambda\). Again, since the examples are shuffled initially, this value will change from one execution of the code to another. For the shuffle order used for 3.2, the best \(\lambda\) is 1.45, with an average MSE across the five folds (on test set) of 0.01841. This is an improvement from the test MSEs in 3.2. \\
 
@@ -281,7 +281,7 @@ Here is a graph of \(\lambda\) vs MSE:
     \label{fig:q3p31}
 \end{figure}
 
-Using the optimal weights produced by \(\lambda = 1.45\), we can relate Ridge Regression and the importance of certain weights. Weights with magnitudes close to zero contribute less to the prediction than weights with larger magnitudes. By retraining the model with regularization using \(\lambda = 1.45\) and sorting the weights by magnitude, we can observe which weights contribute the least (this was done for each of the five folds and then aggregated). Please see the Jupyter Notebook for implementation details. For this particular run, the number of features dropped by the algorithm was 51, producing better MSE of 0.01792:
+Using the optimal weights produced by \(\lambda = 1.45\), we can relate Ridge Regression to the importance of certain weights. Weights with magnitudes close to zero contribute less to the prediction than weights with larger magnitudes. By retraining the model with regularization using \(\lambda = 1.45\) and sorting the weights by magnitude, we can observe which weights contribute the least (this was done for each of the five folds and then aggregated). Please see the Jupyter Notebook for implementation details. For this particular run, the number of features dropped by the algorithm was 51, producing a better MSE of 0.01792:
 
 \begin{center}
 \begin{tabular}{ |c|c| } 
