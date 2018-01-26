@@ -87,9 +87,8 @@ x_axis[1] = np.arange(0, 2, 2 / GRANULARITY)
 for i in range(2, MAX_DEGREE + 1):
     x_axis[i] = pow(x_axis[1], i)
 
-# weights_original = np.random.uniform(high=5., size=[MAX_DEGREE + 1]) # Randomly initialize weights w = [w0, w1]
-weights_original = np.array([5, 6], dtype=np.float64)
-# weights = np.array([4., 7.], dtype=np.float64)
+weights_original = np.random.uniform(high=5., size=[MAX_DEGREE + 1]) # Randomly initialize weights w = [w0, w1]
+# weights_original = np.array([5, 6], dtype=np.float64)
 print('Weights initialized randomly to:', weights_original)
 X = example_set['train']
 y = output_set['train']
@@ -141,7 +140,7 @@ def visualize(W, visualize_all=False, X=None, y=None, title_for_all="", title_fo
 
 
 '''
-Try gradient descent first just for fun with ALPHA=1e-3
+Try gradient descent first just for fun with ALPHA=1e-2
 '''
 # Copy of randomly initialized weights
 weights_GD = np.copy(weights_original)
@@ -228,7 +227,6 @@ alphas = [1e-6, 5e-6, 1e-5, 5e-5, 1e-4, 5e-4, 1e-3, 5e-3, 1e-2, 5e-2]
 MSEs = []
 
 for cur_alpha in alphas:
-    print('cur alpha:', cur_alpha)
     weights, _, _ = SGD(X, y, EPOCHS, np.copy(weights_original), cur_alpha)
     mse_for_valid = mean_square_error(example_set['valid'], output_set['valid'], weights)
     MSEs.append(mse_for_valid)
@@ -245,6 +243,7 @@ plt.ylabel('MSE')
 plt.show()
 
 print('Best alpha:', best_alpha)
+print('Lowest mse on validation set:', lowest_mse)
 
 
 # Obtain optimal weights using best_alpha
