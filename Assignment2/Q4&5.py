@@ -19,7 +19,6 @@ def write_to_csv(array_of_df_objects, filename, indexname=None, header=False, in
 N_examples = 2000
 M = 20
 test_set_percentage = 0.3
-s1, s2, s3 = int(N_examples * .1), int(N_examples * .42), int(N_examples * .48)
 
 # Read in data
 ds2_cov1 = pd.read_csv(r'./Datasets/DS2_Cov1.txt', header=None).drop([M], axis=1)
@@ -34,19 +33,25 @@ ds2_c2_m1 = pd.read_csv(r'./Datasets/DS2_c2_m1.txt', header=None).drop([M], axis
 ds2_c2_m2 = pd.read_csv(r'./Datasets/DS2_c2_m2.txt', header=None).drop([M], axis=1)
 ds2_c2_m3 = pd.read_csv(r'./Datasets/DS2_c2_m3.txt', header=None).drop([M], axis=1)
 
-data1_pos = np.random.multivariate_normal(np.squeeze(ds2_c1_m1), ds2_cov1, s1)
-data1_neg = np.random.multivariate_normal(np.squeeze(ds2_c2_m1), ds2_cov1, s1)
-data2_pos = np.random.multivariate_normal(np.squeeze(ds2_c1_m2), ds2_cov2, s2)
-data2_neg = np.random.multivariate_normal(np.squeeze(ds2_c2_m2), ds2_cov2, s2)
-data3_pos = np.random.multivariate_normal(np.squeeze(ds2_c1_m3), ds2_cov3, s3)
-data3_neg = np.random.multivariate_normal(np.squeeze(ds2_c2_m3), ds2_cov3, s3)
+data1_pos = np.random.multivariate_normal(np.squeeze(ds2_c1_m1), ds2_cov1, N_examples)
+data1_neg = np.random.multivariate_normal(np.squeeze(ds2_c2_m1), ds2_cov1, N_examples)
+data2_pos = np.random.multivariate_normal(np.squeeze(ds2_c1_m2), ds2_cov2, N_examples)
+data2_neg = np.random.multivariate_normal(np.squeeze(ds2_c2_m2), ds2_cov2, N_examples)
+data3_pos = np.random.multivariate_normal(np.squeeze(ds2_c1_m3), ds2_cov3, N_examples)
+data3_neg = np.random.multivariate_normal(np.squeeze(ds2_c2_m3), ds2_cov3, N_examples)
 
-positive_class = pd.DataFrame(np.concatenate((data1_pos, data2_pos, data3_pos)))
-negative_class = pd.DataFrame(np.concatenate((data1_neg, data2_neg, data3_neg)))
+positive_generator = [data1_pos, data2_pos, data3_pos]
+draw = np.random.choice([0, 1, 2], N_examples, p=[.1, .42, .48])
+positive_class = pd.DataFrame([positive_generator[d][i] for i, d in enumerate(draw)])
+
+negative_generator = [data1_neg, data2_neg, data3_neg]
+draw = np.random.choice([0, 1, 2], N_examples, p=[.1, .42, .48])
+negative_class = pd.DataFrame([negative_generator[d][i] for i, d in enumerate(draw)])
 
 positive_class[M] = 1
 negative_class[M] = 0
 
+# Shuffle
 positive_class = positive_class.sample(frac=1).reset_index(drop=True)
 negative_class = negative_class.sample(frac=1).reset_index(drop=True)
 
@@ -95,18 +100,24 @@ def predict(X, w0, w):
 def euclidean_dist(x, y):
     return np.linalg.norm(x - y)
 
-def k_nearest_neighbors(train_x, train_y, test, k):
+def k_nearest_neighbors(train_x, train_y, test, k, testmode=False):
     if k & 1 == 0:
         k += 1
     train_x = train_x.values
     train_y = train_y.values
     test = test.values
-    predictions = []
+    predictions = {}
+
     for i in range(len(test)):
         knn_list = [(train_y[j], euclidean_dist(train_x[j], test[i])) for j in range(len(train_x))]
-        top_k = sorted(knn_list, key=lambda x: x[1])[:k]
-        count_pred = sum(x[0] == 1 for x in top_k)
-        predictions.append(1 if count_pred > k - count_pred else 0)
+        top_k = [pair[0] for pair in sorted(knn_list, key=lambda x: x[1])[:k]]
+        top_k_cumsum = np.cumsum(top_k)
+        # Basically, if we find k neighbors, we can calculate predictions for k from 1 to k - 1. This avoids
+        # repeated computations and speeds up KNN for performance evaluation
+        for neighbors in range(1 if testmode else k, k + 2, 2):
+            if neighbors not in predictions:
+                predictions[neighbors] = []
+            predictions[neighbors].append(1 if top_k_cumsum[neighbors - 1] > neighbors - top_k_cumsum[neighbors - 1] else 0)
 
     return predictions
 
@@ -159,14 +170,23 @@ print('F-Measure:', f_measure)
 print()
 
 # KNN
+max_k = 99
+accuracies = []
+precisions = []
+recalls = []
+f_measures = []
 best_accuracy = -999999
 best_precision = -999999
 best_recall = -999999
 best_f = -999999
 ks = [0, 0, 0, 0]
-for k in range(1, 69, 2):
-    knn_pred = k_nearest_neighbors(train_df.drop([20], axis=1), train_df[20], test_df.drop([20], axis=1), k)
-    acc, precision, recall, f_measure, confusion = score(test_df[20], knn_pred)
+knn_pred = k_nearest_neighbors(train_df.drop([20], axis=1), train_df[20], test_df.drop([20], axis=1), max_k, True)
+for k in range(1, max_k + 2, 2):
+    acc, precision, recall, f_measure, confusion = score(test_df[20], knn_pred[k])
+    accuracies.append(acc)
+    precisions.append(precision)
+    recalls.append(recall)
+    f_measures.append(f_measure)
 
     if acc > best_accuracy:
         best_accuracy = acc
@@ -181,13 +201,25 @@ for k in range(1, 69, 2):
         best_f = f_measure
         ks[3] = k
 
-    print('KNN k:', k)
-    print('Confusion Matrix:', confusion)
-    print('Accuracy:', acc)
-    print('Precision:', precision)
-    print('Recall:', recall)
-    print('F-Measure:', f_measure)
-    print()
+import matplotlib.pyplot as plt
+plt.figure(1)
+plt.plot(np.arange(1, max_k + 2, 2), accuracies, label='accuracy')
+plt.plot(np.arange(1, max_k + 2, 2), precisions, label='precision')
+plt.plot(np.arange(1, max_k + 2, 2), recalls, label='recall')
+plt.plot(np.arange(1, max_k + 2, 2), f_measures, label='f-measure')
+plt.xlabel('K')
+plt.ylabel('Metric Score')
+plt.title('Metrics for Different values of k')
+plt.legend()
+plt.savefig('knn_q3')
+plt.show()
+
+all_res = [(k, accuracies[i], precisions[i], recalls[i], f_measures[i]) for i, k in enumerate(range(1, max_k + 2, 2))]
+
+# Print for latex
+print('k value', '&', 'Accuracy', '&', 'Precision', '&', 'Recall', '&', 'F-Measure' + '\\\\')
+for tup in all_res:
+    print(tup[0], '&', '% 0.5f' % tup[1], '&', '% 0.5f' % tup[2], '&', '% 0.5f' % tup[3], '&', '% 0.5f' % tup[4], '\\\\')
 
 print(best_accuracy, best_precision, best_recall, best_f)
 print(ks)

@@ -7,16 +7,16 @@
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
 
 \title{
-  \normalfont\normalsize
+    \normalfont\normalsize
     \textsc{McGill University}
     \horrule{0.5pt} \\[0.3cm]
-  \huge Assignment 2
+    \huge Assignment 2
     \horrule{2pt} \\[0.3cm]
 }
 
 \author{
-  Nabil Chowdhury \\
-  \small{ID: 260622155} \\
+    Nabil Chowdhury \\
+    \small{ID: 260622155} \\
     \small{COMP 551}
 }
 
@@ -35,9 +35,9 @@ Using the data generated in Question 1, the parameters of the probabilistic LDA 
 
 \[w_0 = -27.22691891296201\]
 \begin{equation}
-  \mathbf{w}=
-  \begin{bmatrix}
-    -14.35081404\\
+    \mathbf{w}=
+    \begin{bmatrix}
+        -14.35081404\\
         8.51556309\\
         5.75326526\\
         3.21580021\\
@@ -57,21 +57,21 @@ Using the data generated in Question 1, the parameters of the probabilistic LDA 
         6.57706464\\
         0.6836093\\
         4.99936544
-  \end{bmatrix}
+    \end{bmatrix}
 \end{equation}
 
 \newpage
 These coefficients were used to obtain the following metrics from the test set:
 \begin{center}
 \begin{tabular}{ |c|c| } 
-  \hline
-  \textbf{Metric} & \textbf{Score} \\ 
-  \hline
-  Accuracy & 0.9525 \\
-  Precision & 0.95 \\ 
-  Recall & 0.95477 \\
+    \hline
+    \textbf{Metric} & \textbf{Score} \\ 
+    \hline
+    Accuracy & 0.9525 \\
+    Precision & 0.95 \\ 
+    Recall & 0.95477 \\
     F-Measure & 0.95238 \\
-  \hline
+    \hline
 \end{tabular}
 \end{center}
 
@@ -86,10 +86,10 @@ The best k for accuracy and recall was 77. The best k for precision and F-score 
 The raw scores for all k is shown below, with k=17 and k=77 rows bolded:
 \begin{center}
 \begin{tabular}{ |c|c|c|c|c| } 
-  \hline
-  \textbf{K value} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-Measure}\\ 
-  \hline
-  1 &  0.52917 &  0.51333 &  0.53012 &  0.52159 \\
+    \hline
+    \textbf{K value} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-Measure}\\ 
+    \hline
+    1 &  0.52917 &  0.51333 &  0.53012 &  0.52159 \\
     3 &  0.53833 &  0.53833 &  0.53833 &  0.53833 \\
     5 &  0.52000 &  0.53667 &  0.51935 &  0.52787 \\
     7 &  0.54083 &  0.55667 &  0.53958 &  0.54799 \\
@@ -139,7 +139,7 @@ The raw scores for all k is shown below, with k=17 and k=77 rows bolded:
     95 &  0.57083 &  0.52333 &  0.57827 &  0.54943 \\
     97 &  0.56250 &  0.51000 &  0.56983 &  0.53826 \\
     99 &  0.56417 &  0.51000 &  0.57196 &  0.53921 \\
-  \hline
+    \hline
 \end{tabular}
 \end{center}
 
@@ -153,44 +153,44 @@ The code explains this step clearly. The data is shuffled and then output to DS2
 \subsection{LDA}
 Using the data generated in Question 4, the parameters of the probabilistic LDA model were found and used to calculate the coefficients \(w_0\) and \(\mathbf{w}\):\\
 
-\[w_0 = 0.06778521423199102\]
+\[w_0 = 0.07921153907637934\]
 \begin{equation}
-  \mathbf{w}=
-  \begin{bmatrix}
-    0.09214283\\
-        0.00292239\\
-        -0.01834667\\
-        0.02224508\\
-        0.01717231\\
-        -0.02159144\\
-        0.09611934\\
-        -0.11333148\\
-        0.02888671\\
-        -0.02903803\\
-        -0.04746149\\
-        -0.00753071\\
-        -0.09138599\\
-        0.00557748\\
-        0.03638741\\
-        -0.03275205\\
-        -0.05173444\\
-        -0.00352907\\
-        0.01535743\\
-        0.03403121
-  \end{bmatrix}
+    \mathbf{w}=
+    \begin{bmatrix}
+         0.04124253 \\
+        -0.00244305 \\
+        -0.01366028 \\
+         0.01470345 \\
+        -0.03887653 \\
+        -0.03692325 \\
+         0.04821048 \\
+         0.04070492 \\
+        -0.03958812 \\
+        -0.05941566 \\
+        -0.11504490 \\
+         0.03493932 \\
+         0.08516702 \\
+         0.00812546 \\
+        -0.00383386 \\
+        -0.08377713 \\
+        -0.10174113 \\
+        -0.02114581 \\
+         0.10470002 \\
+         0.06721695 \\
+    \end{bmatrix}
 \end{equation}
 
 These coefficients were used to obtain the following metrics from the test set:
 \begin{center}
 \begin{tabular}{ |c|c| } 
-  \hline
-  \textbf{Metric} & \textbf{Score} \\ 
-  \hline
-  Accuracy & 0.53416 \\
-  Precision &  0.53166 \\ 
-  Recall & 0.53433 \\
-    F-Measure & 0.53299 \\
-  \hline
+    \hline
+    \textbf{Metric} & \textbf{Score} \\ 
+    \hline
+    Accuracy & 0.51666 \\
+    Precision & 0.51 \\ 
+    Recall & 0.51689 \\
+    F-Measure & 0.51342 \\
+    \hline
 \end{tabular}
 \end{center}
 
@@ -200,75 +200,75 @@ We notice that when the data is generate by multiple Gaussian distributions, the
 Here is a plot of K vs the four metrics: \\
 \includegraphics[width=\linewidth]{knn_q5.png}
 
-The optimal K value was 9. The full performance metric for all Ks tested is shown below:
+The optimal K value was 47 for all four metrics. The full performance metric for all Ks tested is shown below:
 
 \begin{center}
 \begin{tabular}{ |c|c|c|c|c| } 
-  \hline
-  \textbf{K value} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-Measure}\\ 
-  \hline
-  1 &  0.54000 &  0.55167 &  0.53909 &  0.54530 \\
-    3 &  0.51833 &  0.51167 &  0.51858 &  0.51510 \\
-    5 &  0.51833 &  0.51500 &  0.51846 &  0.51672 \\
-    7 &  0.52417 &  0.50833 &  0.52496 &  0.51651 \\
-    \textbf{9} &  \textbf{0.54583} &  \textbf{0.55500} &  \textbf{0.54501} &  \textbf{0.54996} \\
-    11 &  0.54000 &  0.55500 &  0.53883 &  0.54680 \\
-    13 &  0.54417 &  0.54667 &  0.54395 &  0.54530 \\
-    15 &  0.53167 &  0.52000 &  0.53242 &  0.52614 \\
-    17 &  0.52333 &  0.51500 &  0.52373 &  0.51933 \\
-    19 &  0.52333 &  0.52167 &  0.52341 &  0.52254 \\
-    21 &  0.52917 &  0.53000 &  0.52912 &  0.52956 \\
-    23 &  0.53250 &  0.53500 &  0.53234 &  0.53367 \\
-    25 &  0.53333 &  0.53500 &  0.53322 &  0.53411 \\
-    27 &  0.52500 &  0.53333 &  0.52459 &  0.52893 \\
-    29 &  0.51917 &  0.53167 &  0.51870 &  0.52510 \\
-    31 &  0.51917 &  0.54333 &  0.51828 &  0.53051 \\
-    33 &  0.52333 &  0.54333 &  0.52244 &  0.53268 \\
-    35 &  0.51417 &  0.52333 &  0.51391 &  0.51858 \\
-    37 &  0.50750 &  0.51333 &  0.50741 &  0.51036 \\
-    39 &  0.51167 &  0.51333 &  0.51163 &  0.51248 \\
-    41 &  0.51167 &  0.51000 &  0.51171 &  0.51085 \\
-    43 &  0.52417 &  0.52667 &  0.52405 &  0.52535 \\
-    45 &  0.51917 &  0.52000 &  0.51913 &  0.51957 \\
-    47 &  0.51833 &  0.52167 &  0.51821 &  0.51993 \\
-    49 &  0.51917 &  0.52000 &  0.51913 &  0.51957 \\
-    51 &  0.52500 &  0.53167 &  0.52467 &  0.52815 \\
-    53 &  0.51833 &  0.50833 &  0.51871 &  0.51347 \\
-    55 &  0.52667 &  0.52500 &  0.52676 &  0.52588 \\
-    57 &  0.53083 &  0.53167 &  0.53078 &  0.53122 \\
-    59 &  0.52500 &  0.53500 &  0.52451 &  0.52970 \\
-    61 &  0.52250 &  0.52833 &  0.52224 &  0.52527 \\
-    63 &  0.52167 &  0.51833 &  0.52181 &  0.52007 \\
-    65 &  0.51917 &  0.52000 &  0.51913 &  0.51957 \\
-    67 &  0.51500 &  0.51833 &  0.51490 &  0.51661 \\
-    69 &  0.51583 &  0.51833 &  0.51575 &  0.51704 \\
-    71 &  0.51917 &  0.52500 &  0.51895 &  0.52196 \\
-    73 &  0.51333 &  0.52000 &  0.51316 &  0.51656 \\
-    75 &  0.51750 &  0.51500 &  0.51759 &  0.51629 \\
-    77 &  0.51583 &  0.51667 &  0.51581 &  0.51624 \\
-    79 &  0.51417 &  0.51500 &  0.51414 &  0.51457 \\
-    81 &  0.50917 &  0.51167 &  0.50912 &  0.51039 \\
-    83 &  0.51333 &  0.51500 &  0.51329 &  0.51414 \\
-    85 &  0.52500 &  0.51000 &  0.52577 &  0.51777 \\
-    87 &  0.52250 &  0.51167 &  0.52300 &  0.51727 \\
-    89 &  0.51833 &  0.51333 &  0.51852 &  0.51591 \\
-    91 &  0.52750 &  0.51667 &  0.52811 &  0.52233 \\
-    93 &  0.52417 &  0.52000 &  0.52437 &  0.52218 \\
-    95 &  0.51917 &  0.52000 &  0.51913 &  0.51957 \\
-    97 &  0.52167 &  0.51500 &  0.52196 &  0.51846 \\
-    99 &  0.52250 &  0.51500 &  0.52284 &  0.51889 \\
-  \hline
+    \hline
+    \textbf{K value} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-Measure}\\ 
+    \hline
+    1 &  0.50500 &  0.51000 &  0.50495 &  0.50746 \\
+    3 &  0.52833 &  0.53833 &  0.52778 &  0.53300 \\
+    5 &  0.51167 &  0.52500 &  0.51136 &  0.51809 \\
+    7 &  0.52833 &  0.54500 &  0.52742 &  0.53607 \\
+    9 &  0.53250 &  0.54000 &  0.53202 &  0.53598 \\
+    11 &  0.51917 &  0.52333 &  0.51901 &  0.52116 \\
+    13 &  0.51583 &  0.52667 &  0.51550 &  0.52102 \\
+    15 &  0.52333 &  0.53833 &  0.52265 &  0.53038 \\
+    17 &  0.52417 &  0.53667 &  0.52358 &  0.53004 \\
+    19 &  0.51917 &  0.54167 &  0.51834 &  0.52975 \\
+    21 &  0.51917 &  0.54333 &  0.51828 &  0.53051 \\
+    23 &  0.52833 &  0.55500 &  0.52690 &  0.54058 \\
+    25 &  0.52833 &  0.56333 &  0.52648 &  0.54428 \\
+    27 &  0.52917 &  0.56833 &  0.52705 &  0.54691 \\
+    29 &  0.52667 &  0.55500 &  0.52524 &  0.53971 \\
+    31 &  0.53500 &  0.55667 &  0.53355 &  0.54486 \\
+    33 &  0.53417 &  0.55833 &  0.53259 &  0.54516 \\
+    35 &  0.53750 &  0.56833 &  0.53532 &  0.55133 \\
+    37 &  0.54417 &  0.57667 &  0.54147 &  0.55851 \\
+    39 &  0.54833 &  0.57667 &  0.54574 &  0.56078 \\
+    41 &  0.53917 &  0.57333 &  0.53666 &  0.55439 \\
+    43 &  0.55333 &  0.59000 &  0.54969 &  0.56913 \\
+    45 &  0.55750 &  0.59333 &  0.55365 &  0.57281 \\
+    \textbf{47} &  \textbf{0.56000} &  \textbf{0.60500} &  \textbf{0.55505} &  \textbf{0.57895} \\
+    49 &  0.55250 &  0.60167 &  0.54780 &  0.57347 \\
+    51 &  0.54750 &  0.59667 &  0.54325 &  0.56871 \\
+    53 &  0.54917 &  0.60167 &  0.54449 &  0.57165 \\
+    55 &  0.54083 &  0.58500 &  0.53752 &  0.56026 \\
+    57 &  0.54083 &  0.58833 &  0.53729 &  0.56165 \\
+    59 &  0.53000 &  0.59000 &  0.52679 &  0.55660 \\
+    61 &  0.53250 &  0.59000 &  0.52915 &  0.55792 \\
+    63 &  0.53750 &  0.59500 &  0.53363 &  0.56265 \\
+    65 &  0.54083 &  0.59500 &  0.53684 &  0.56443 \\
+    67 &  0.53417 &  0.58667 &  0.53092 &  0.55740 \\
+    69 &  0.52667 &  0.57500 &  0.52432 &  0.54849 \\
+    71 &  0.54167 &  0.58500 &  0.53834 &  0.56070 \\
+    73 &  0.53417 &  0.57500 &  0.53159 &  0.55244 \\
+    75 &  0.53500 &  0.57667 &  0.53231 &  0.55360 \\
+    77 &  0.52583 &  0.57833 &  0.52338 &  0.54949 \\
+    79 &  0.52417 &  0.56667 &  0.52227 &  0.54357 \\
+    81 &  0.51917 &  0.55833 &  0.51777 &  0.53729 \\
+    83 &  0.51833 &  0.56500 &  0.51677 &  0.53981 \\
+    85 &  0.51583 &  0.57000 &  0.51429 &  0.54071 \\
+    87 &  0.51583 &  0.55833 &  0.51459 &  0.53557 \\
+    89 &  0.52083 &  0.57167 &  0.51891 &  0.54401 \\
+    91 &  0.51333 &  0.56000 &  0.51220 &  0.53503 \\
+    93 &  0.51750 &  0.56667 &  0.51593 &  0.54011 \\
+    95 &  0.51667 &  0.56833 &  0.51511 &  0.54041 \\
+    97 &  0.51750 &  0.56167 &  0.51608 &  0.53791 \\
+    99 &  0.51583 &  0.56667 &  0.51437 &  0.53925 \\
+    \hline
 \end{tabular}
 \end{center}
 
 % Question 6
 \section{Comparing performance of LDA and KNN on DS1 and DS2}
 
-We can see that KNN actually beats LDA for DS2 (only slightly)! In fact, the performances are quite similar to each other. When comparing the results to those of DS1, We see that KNN performs slightly worse for DS2 than DS1 (this is most likely due to randomness), whereas LDA performs much worse for DS2 than DS1. This experiment provides evidence that KNN is less affected when the dataset is not generated from a single Gaussian distribution. LDA performs worse because the in-class variances are bigger for DS2 as compared to DS1 due to multiple different Gaussian distributions being used instead of just one.
+We can see that KNN actually beats LDA for DS2 (only slightly)! In fact, the performances of LDA and KNN for DS2 are quite similar to each other. When comparing the results to those of DS1, We see that KNN performs similarly for DS2, whereas LDA performs much worse for DS2 than DS1. This experiment provides evidence that KNN is less affected when the dataset is generated from a mixture of Gaussian distribution. LDA performs worse because the in-class variances are bigger for DS2 as compared to DS1 due to multiple different Gaussian distributions being used instead of just one.
 
 \begin{thebibliography}{9}
 \bibitem{All} 
-Only class notes were used for this assignment for all questions.
+The following stackoverflow post was used to help in Q4 when dealing with multiple gaussians: https://stackoverflow.com/questions/39677967/python-sampling-from-different-distributions-with-different-probability
 \end{thebibliography}
 
 \end{document}
