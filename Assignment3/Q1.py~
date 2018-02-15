@@ -1,0 +1,10 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import string
+
+# Read in the datasets
+imdb_train = open(r'./Datasets/IMDB-train.txt', 'r').read()
+print(imdb_train)
+imdb_train_processed = imdb.translalte(None, string.punctuation)
+print(imb_train_processed[:100])
