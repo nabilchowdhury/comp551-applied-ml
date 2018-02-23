@@ -15,7 +15,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %----------------------------------------------------------------------------------------
-%   PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
 \documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
@@ -51,13 +51,13 @@
 
 
 %----------------------------------------------------------------------------------------
-%   TITLE SECTION
+%	TITLE SECTION
 %----------------------------------------------------------------------------------------
 
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
 
-\title{ 
-\normalfont \normalsize 
+\title{
+\normalfont \normalsize
 \textsc{McGill University} \\ [25pt] % Your university, school and/or department name(s)
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
 \huge Assignment 1 \\ % The assignment title
@@ -77,7 +77,7 @@
 \maketitle % Print the title
 
 %--------------
-%   PROBLEM 1
+%	PROBLEM 1
 %--------------
 
 \section{Model Selection}
@@ -88,14 +88,14 @@ Dataset-1 consists of a real-valued scalar as input, and a real-valued scalar as
 Applying the closed form solution  \(w = (X^TX)^{-1}X^Ty\) yields the least-squares weights \textit{w} for the polynomial. Using these weights, the following mean-squared-errors for the training, validation and test sets were calculated:
 
 \begin{center}
-\begin{tabular}{ |c|c| } 
-    \hline
-    \textbf{Set} & \textbf{MSE} \\ 
-    \hline
-    Train & 7.15259 \\
-    Valid & 458.64632 \\ 
-    Test & 17.25163 \\
-    \hline
+\begin{tabular}{ |c|c| }
+	\hline
+	\textbf{Set} & \textbf{MSE} \\
+	\hline
+	Train & 7.15259 \\
+	Valid & 458.64632 \\
+	Test & 17.25163 \\
+	\hline
 \end{tabular}
 \end{center}
 
@@ -134,14 +134,14 @@ Varying \(\lambda\) from 0 to 1 with increments of .0001 yields the following re
 The optimum \(\lambda\), based on the lowest MSE of the validation set is 0.0197. Retraining the model with this chosen lambda yields much better MSEs for the validation and test sets:
 
 \begin{center}
-\begin{tabular}{ |c|c| } 
-    \hline
-    \textbf{Set} & \textbf{MSE with \(\lambda = 0.0197\)} \\ 
-    \hline
+\begin{tabular}{ |c|c| }
+	\hline
+	\textbf{Set} & \textbf{MSE with \(\lambda = 0.0197\)} \\
+	\hline
     Train & 8.85645 \\
-    Valid & 9.13508 \\ 
-    Test & 10.73230 \\
-    \hline
+	Valid & 9.13508 \\
+	Test & 10.73230 \\
+	\hline
 \end{tabular}
 \end{center}
 
@@ -167,7 +167,7 @@ We can also visualize this regularized fit on the training, validation and test 
 Observing the regularized fit of the model indicates two sharp bends (at the ends), with approximately 3 slight bends in between. This indicates that a 6\textsuperscript{th} degree polynomial is a good estimate of the source polynomial.
 
 %--------------
-%   PROBLEM 2
+%	PROBLEM 2
 %--------------
 
 \section{Gradient Descent For Regression}
@@ -182,19 +182,19 @@ Dataset-2 provides us with a real-valued scalar as input and a real-valued scala
     \label{fig:q2p1}
 \end{figure}
 \begin{center}
-\begin{tabular}{ |c|c| } 
-    \hline
-    \textbf{Set} & \textbf{Final MSE at \(\alpha = 10^{-6}\)} \\ 
-    \hline
+\begin{tabular}{ |c|c| }
+	\hline
+	\textbf{Set} & \textbf{Final MSE at \(\alpha = 10^{-6}\)} \\
+	\hline
     Train & 0.10277 \\
-    Valid & 0.07558 \\ 
-    Test & 0.08120 \\
-    \hline
+	Valid & 0.07558 \\
+	Test & 0.08120 \\
+	\hline
 \end{tabular}
 \end{center}
 
 \subsection{Finding the best step size}
-The following step sizes were tested to determine which step size yielded the best results for the validation set:  \(10^{-6}, 5\times10^{-6}, 10^{-5}, 5\times10^{-5}, 10^{-4}, 5\times10^{-4}, 10^{-3}, 5\times10^{-3}, 10^{-2}, 5\times10^{-2}\). Based on these values and the initial random weights used in 2.1, the best \(\alpha\) was found to be \(5\times10^{-6}\). 
+The following step sizes were tested to determine which step size yielded the best results for the validation set:  \(10^{-6}, 5\times10^{-6}, 10^{-5}, 5\times10^{-5}, 10^{-4}, 5\times10^{-4}, 10^{-3}, 5\times10^{-3}, 10^{-2}, 5\times10^{-2}\). Based on these values and the initial random weights used in 2.1, the best \(\alpha\) was found to be \(5\times10^{-6}\).
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{q2p2.png}
@@ -204,17 +204,17 @@ The following step sizes were tested to determine which step size yielded the be
 
 The MSE for all three sets using the optimal \(\alpha\) value of \(5\times10^{-6}\) is:
 \begin{center}
-\begin{tabular}{ |c|c| } 
-    \hline
-    \textbf{Set} & \textbf{Final MSE at \(\alpha = 5\times10^{-6}\)} \\
-    \hline
+\begin{tabular}{ |c|c| }
+	\hline
+	\textbf{Set} & \textbf{Final MSE at \(\alpha = 5\times10^{-6}\)} \\
+	\hline
     Train &  0.09606 \\
-    Valid & 0.07289 \\ 
-    Test & 0.07099 \\
-    \hline
+	Valid & 0.07289 \\
+	Test & 0.07099 \\
+	\hline
 \end{tabular}
 \end{center}
-As we can see, the MSEs at \(\alpha = 5\times10^{-6}\) are lower than at  \(\alpha = 10^{-6}\) 
+As we can see, the MSEs at \(\alpha = 5\times10^{-6}\) are lower than at  \(\alpha = 10^{-6}\)
 
 \subsection{Evolution of the regression fit during training}
 The following figures show the progression of SGD at 0, 800, 1600, 2400, 3200 and 4000 epochs (using \(\alpha\ = 5\times10^{-6}\)).
@@ -250,20 +250,20 @@ The mean is a good filler for missing values if that particular attribute is int
 
 The mean will not work categorical data since categories may not have an exact order (nominal data), and if they do, the distance between subsequent categories may not be definite (ordinal data). For nominal data, the mode is a good candidate for filling in missing values whereas for ordinal data, both the mode and median can be used, since there is notion of order and distance, even though the distance is not exactly known. \\
 
-For this dataset, the mean of each feature (over all examples) was used to fill in missing values. 
+For this dataset, the mean of each feature (over all examples) was used to fill in missing values.
 
 \subsection{Fitting the model}
 The data contained 127 attributes, of which the first five were "not predictive" according to the source, and therefore omitted. Including the bias column added to the dataset, a total of 123 weights were used in the model. The data was shuffled and split into five 80-20 train-test splits. Using both the closed form solution and gradient descent separately on each of the splits, the following MSEs averaged over 5 splits were found:\\
 
 Note: The MSE depends on the random shuffling of the data. This is one result.
 \begin{center}
-\begin{tabular}{ |c|c| } 
-    \hline
-    \textbf{Algorithm} & \textbf{MSE on test} \\
-    \hline
+\begin{tabular}{ |c|c| }
+	\hline
+	\textbf{Algorithm} & \textbf{MSE on test} \\
+	\hline
     Closed form solution & 0.11375 \\
-    Gradient descent & 0.45150 \\ 
-    \hline
+	Gradient descent & 0.45150 \\
+	\hline
 \end{tabular}
 \end{center}
 
@@ -284,13 +284,13 @@ Here is a graph of \(\lambda\) vs MSE:
 Using the optimal weights produced by \(\lambda = 1.45\), we can relate Ridge Regression to the importance of certain weights. Weights with magnitudes close to zero contribute less to the prediction than weights with larger magnitudes. By retraining the model with regularization using \(\lambda = 1.45\) and sorting the weights by magnitude, we can observe which weights contribute the least (this was done for each of the five folds and then aggregated). Please see the Jupyter Notebook for implementation details. For this particular run, the number of features dropped by the algorithm was 51, producing a better MSE of 0.01792:
 
 \begin{center}
-\begin{tabular}{ |c|c| } 
-    \hline
-    \textbf{No. of features} & \textbf{MSE on test, with \(\lambda = 1.45\)} \\
-    \hline
+\begin{tabular}{ |c|c| }
+	\hline
+	\textbf{No. of features} & \textbf{MSE on test, with \(\lambda = 1.45\)} \\
+	\hline
     All & 0.01841 \\
-    \textbf{72} &  \textbf{0.01792} \\ 
-    \hline
+	\textbf{72} &  \textbf{0.01792} \\
+	\hline
 \end{tabular}
 \end{center}
 
@@ -300,10 +300,10 @@ Using the optimal weights produced by \(\lambda = 1.45\), we can relate Ridge Re
 \bibitem{discussions}
 For Question 1.1: Helped the following people with understanding the problem statement and answering Python-related questions: John Wu, Tiffany Wang, Frank Ye. All code and writing is original and written individually.
 
-\bibitem{fillingmissingdata} 
+\bibitem{fillingmissingdata}
 For Question 3.1: http://www.mymarketresearchmethods.com/types-of-data-nominal-ordinal-interval-ratio/
 
-\bibitem{featureselection} 
+\bibitem{featureselection}
 For Question 3.3: http://blog.datadive.net/selecting-good-features-part-ii-linear-models-and-regularization/
 \end{thebibliography}
 
