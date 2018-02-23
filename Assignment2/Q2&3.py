@@ -43,8 +43,10 @@ def predict(X, w0, w):
     hypothesis = [1 if val > 0.5 else 0 for val in hypothesis_raw]
     return hypothesis
 
+
 def euclidean_dist(x, y):
     return np.linalg.norm(x - y)
+
 
 def k_nearest_neighbors(train_x, train_y, test, k, testmode=False):
     if k & 1 == 0:

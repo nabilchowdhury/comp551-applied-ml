@@ -7,16 +7,16 @@
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
 
 \title{
-    \normalfont\normalsize
+	\normalfont\normalsize
     \textsc{McGill University}
     \horrule{0.5pt} \\[0.3cm]
-    \huge Assignment 2
+	\huge Assignment 2
     \horrule{2pt} \\[0.3cm]
 }
 
 \author{
-    Nabil Chowdhury \\
-    \small{ID: 260622155} \\
+	Nabil Chowdhury \\
+	\small{ID: 260622155} \\
     \small{COMP 551}
 }
 
@@ -35,9 +35,9 @@ Using the data generated in Question 1, the parameters of the probabilistic LDA 
 
 \[w_0 = -27.22691891296201\]
 \begin{equation}
-    \mathbf{w}=
-    \begin{bmatrix}
-        -14.35081404\\
+	\mathbf{w}=
+	\begin{bmatrix}
+		-14.35081404\\
         8.51556309\\
         5.75326526\\
         3.21580021\\
@@ -57,21 +57,21 @@ Using the data generated in Question 1, the parameters of the probabilistic LDA 
         6.57706464\\
         0.6836093\\
         4.99936544
-    \end{bmatrix}
+	\end{bmatrix}
 \end{equation}
 
 \newpage
 These coefficients were used to obtain the following metrics from the test set:
 \begin{center}
-\begin{tabular}{ |c|c| } 
-    \hline
-    \textbf{Metric} & \textbf{Score} \\ 
-    \hline
-    Accuracy & 0.9525 \\
-    Precision & 0.95 \\ 
-    Recall & 0.95477 \\
+\begin{tabular}{ |c|c| }
+	\hline
+	\textbf{Metric} & \textbf{Score} \\
+	\hline
+	Accuracy & 0.9525 \\
+	Precision & 0.95 \\
+	Recall & 0.95477 \\
     F-Measure & 0.95238 \\
-    \hline
+	\hline
 \end{tabular}
 \end{center}
 
@@ -85,11 +85,11 @@ The best k for accuracy and recall was 77. The best k for precision and F-score 
 
 The raw scores for all k is shown below, with k=17 and k=77 rows bolded:
 \begin{center}
-\begin{tabular}{ |c|c|c|c|c| } 
-    \hline
-    \textbf{K value} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-Measure}\\ 
-    \hline
-    1 &  0.52917 &  0.51333 &  0.53012 &  0.52159 \\
+\begin{tabular}{ |c|c|c|c|c| }
+	\hline
+	\textbf{K value} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-Measure}\\
+	\hline
+	1 &  0.52917 &  0.51333 &  0.53012 &  0.52159 \\
     3 &  0.53833 &  0.53833 &  0.53833 &  0.53833 \\
     5 &  0.52000 &  0.53667 &  0.51935 &  0.52787 \\
     7 &  0.54083 &  0.55667 &  0.53958 &  0.54799 \\
@@ -139,7 +139,7 @@ The raw scores for all k is shown below, with k=17 and k=77 rows bolded:
     95 &  0.57083 &  0.52333 &  0.57827 &  0.54943 \\
     97 &  0.56250 &  0.51000 &  0.56983 &  0.53826 \\
     99 &  0.56417 &  0.51000 &  0.57196 &  0.53921 \\
-    \hline
+	\hline
 \end{tabular}
 \end{center}
 
@@ -155,9 +155,9 @@ Using the data generated in Question 4, the parameters of the probabilistic LDA 
 
 \[w_0 = 0.07921153907637934\]
 \begin{equation}
-    \mathbf{w}=
-    \begin{bmatrix}
-         0.04124253 \\
+	\mathbf{w}=
+	\begin{bmatrix}
+		 0.04124253 \\
         -0.00244305 \\
         -0.01366028 \\
          0.01470345 \\
@@ -177,20 +177,20 @@ Using the data generated in Question 4, the parameters of the probabilistic LDA 
         -0.02114581 \\
          0.10470002 \\
          0.06721695 \\
-    \end{bmatrix}
+	\end{bmatrix}
 \end{equation}
 
 These coefficients were used to obtain the following metrics from the test set:
 \begin{center}
-\begin{tabular}{ |c|c| } 
-    \hline
-    \textbf{Metric} & \textbf{Score} \\ 
-    \hline
-    Accuracy & 0.51666 \\
-    Precision & 0.51 \\ 
-    Recall & 0.51689 \\
+\begin{tabular}{ |c|c| }
+	\hline
+	\textbf{Metric} & \textbf{Score} \\
+	\hline
+	Accuracy & 0.51666 \\
+	Precision & 0.51 \\
+	Recall & 0.51689 \\
     F-Measure & 0.51342 \\
-    \hline
+	\hline
 \end{tabular}
 \end{center}
 
@@ -203,11 +203,11 @@ Here is a plot of K vs the four metrics: \\
 The optimal K value was 47 for all four metrics. The full performance metric for all Ks tested is shown below:
 
 \begin{center}
-\begin{tabular}{ |c|c|c|c|c| } 
-    \hline
-    \textbf{K value} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-Measure}\\ 
-    \hline
-    1 &  0.50500 &  0.51000 &  0.50495 &  0.50746 \\
+\begin{tabular}{ |c|c|c|c|c| }
+	\hline
+	\textbf{K value} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F-Measure}\\
+	\hline
+	1 &  0.50500 &  0.51000 &  0.50495 &  0.50746 \\
     3 &  0.52833 &  0.53833 &  0.52778 &  0.53300 \\
     5 &  0.51167 &  0.52500 &  0.51136 &  0.51809 \\
     7 &  0.52833 &  0.54500 &  0.52742 &  0.53607 \\
@@ -257,7 +257,7 @@ The optimal K value was 47 for all four metrics. The full performance metric for
     95 &  0.51667 &  0.56833 &  0.51511 &  0.54041 \\
     97 &  0.51750 &  0.56167 &  0.51608 &  0.53791 \\
     99 &  0.51583 &  0.56667 &  0.51437 &  0.53925 \\
-    \hline
+	\hline
 \end{tabular}
 \end{center}
 
@@ -267,7 +267,7 @@ The optimal K value was 47 for all four metrics. The full performance metric for
 We can see that KNN actually beats LDA for DS2 (only slightly)! In fact, the performances of LDA and KNN for DS2 are quite similar to each other. When comparing the results to those of DS1, We see that KNN performs similarly for DS2, whereas LDA performs much worse for DS2 than DS1. This experiment provides evidence that KNN is less affected when the dataset is generated from a mixture of Gaussian distribution. LDA performs worse because the in-class variances are bigger for DS2 as compared to DS1 due to multiple different Gaussian distributions being used instead of just one.
 
 \begin{thebibliography}{9}
-\bibitem{All} 
+\bibitem{All}
 The following stackoverflow post was used to help in Q4 when dealing with multiple gaussians: https://stackoverflow.com/questions/39677967/python-sampling-from-different-distributions-with-different-probability
 \end{thebibliography}
 
