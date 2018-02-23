@@ -1,6 +1,21 @@
+# Base libraries
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import pandas as pd
+import scipy
+
+# Processing & feature generation
+from collections import Counter
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics import f1_score
+from sklearn.model_selection import GridSearchCV, PredefinedSplit
+from sklearn.preprocessing import normalize
+
+# Classifiers
+from sklearn.naive_bayes import BernoulliNB, GaussianNB
+from sklearn.svm import LinearSVC
+from sklearn.tree import DecisionTreeClassifier
 
 '''
 Dataset Summary:
@@ -8,52 +23,101 @@ Yelp:
     Training set: 7000
     Valid set: 1000
     Test set: 2000
-    
+
     Type: 5 class classification problem (1:worst - 5:best)
-    
+
 IMDB:
     Training set: 15000
     Valid set: 10000
     Test set: 25000
-    
+
     Type: 2 class problem (1: positive, 0: negative)
 '''
 
-def binary_bag_of_words(X, y):
-    pass
+PATH = r'./Datasets'
+M_FEATURES = 10000
 
-def frequency_bag_of_words(X, y):
-    pass
 
-def preprocess_text(text, column):
-    text[column] = text[column].str.replace('[^\w\s]', '').str.lower()
+def read_dataset(filename, column_names=['Review', 'Label']):
+    return pd.read_table(os.path.join(PATH, filename), sep='\t', lineterminator='\n', header=None, names=column_names)
 
-def frequency_count(text, sort_ascending=True):
-    pass
+
+def preprocess(dataframe, column):
+    dataframe[column] = dataframe[column].str.replace('<br /><br />', ' ').str.replace('[^\w\s]', '').str.lower()
+
+
+def get_vocabulary(training_dict, column, features=M_FEATURES, save_to_file=False):
+    most_common = {}
+    for dataset in training_dict:
+        all_words_list = [word for sentence in training_dict[dataset][column].str.split().tolist() for word in sentence]
+        top_k = Counter(all_words_list).most_common(features)
+        most_common[dataset] = {word[0]: i for i, word in enumerate(top_k)}
+
+        if save_to_file:
+            # Write to file for submission
+            vocab = pd.DataFrame(top_k)
+            vocab[2] = np.arange(0, features)  # These are the word IDs
+            vocab.to_csv('./Submission/' + dataset + '-vocab.txt', sep='\t', header=False, index=False, columns=[0, 2, 1])
+
+    return most_common
+
+
+def bag_of_words(datasets, vocabulary, xname='Review', yname='Label'):
+    binary_bog = {}
+    freq_bog = {}
+    vectorizer = CountVectorizer(vocabulary=vocabulary)
+    for name in datasets:
+        vec = vectorizer.fit_transform(datasets[name][xname])
+        freq_bog[name] = [normalize(vec), datasets[name][yname]]
+        vec[vec > 1] = 1
+        binary_bog[name] = [vec, datasets[name][yname]]
+
+    return binary_bog, freq_bog
+
+
+def write_converted_dataset(datasets, vocab_dict, dataset_name):
+    for dataset in datasets[dataset_name]:
+        with open('./Submission/' + dataset_name + '-' + dataset + '.txt', 'w') as file:
+            for i in range(len(datasets[dataset_name][dataset])):
+                file.write(' '.join([str(vocab_dict[dataset_name][word]) for word in datasets[dataset_name][dataset].iloc[i, 0].split()
+                                     if word in vocab_dict[dataset_name]]) + '\t' + str(datasets[dataset_name][dataset].iloc[i, 1]) + '\n')
+
+
+def random_classifier(train_on, predict_on):
+    return np.random.choice(np.unique(train_on[1]), len(predict_on[1]))
+
+
+def majority_class_classifier(train_on, predict_on):
+    return np.full(len(predict_on[1]), scipy.stats.mode(train_on[1])[0][0])
+
+
+def do_clf_test(clf, dataset_dict, tune_params=None, average='micro'):
+    for dname, dset in dataset_dict.items():
+        if callable(clf):
+            print('\t{} score using {}: {}\n'.format(dname.upper(), clf.__name__.upper(), f1_score(dset[1], clf(dataset_dict['train'], dset), average=average)))
+        else:
+            clf = GridSearchCV(clf, tune_params, cv=n_folds)
+            clf.fit(dataset_dict['train'][0], dataset_dict['train'][1])
+            print('\t{} score using {}: {}\n'.format(dname, clf.__class__.__name__.upper(), f1_score(dset[1], clf.predict(dset[0]), average=average)))
+
 
 if __name__ == '__main__':
-    '''
-    Read in the data
-    '''
+    WRITE = False
     # Yelp datsets
-    yelp_train = pd.read_table(r'./Datasets/yelp-train.txt', sep='\t', lineterminator='\n', header=None,
-                               names=['Review', 'Rating'])
-    yelp_valid = pd.read_table(r'./Datasets/yelp-valid.txt', sep='\t', lineterminator='\n', header=None,
-                               names=['Review', 'Rating'])
-    yelp_test = pd.read_table(r'./Datasets/yelp-test.txt', sep='\t', lineterminator='\n', header=None,
-                              names=['Review', 'Rating'])
+    yelp_train = read_dataset('yelp-train.txt')
+    yelp_valid = read_dataset('yelp-valid.txt')
+    yelp_test = read_dataset('yelp-test.txt')
 
     # IMDB datasets
-    imdb_train = pd.read_table(r'./Datasets/IMDB-train.txt', sep='\t', lineterminator='\n', header=None,
-                               names=['Review', 'Sentiment'])
-    imdb_valid = pd.read_table(r'./Datasets/IMDB-valid.txt', sep='\t', lineterminator='\n', header=None,
-                               names=['Review', 'Sentiment'])
-    imdb_test = pd.read_table(r'./Datasets/imdb-test.txt', sep='\t', lineterminator='\n', header=None,
-                              names=['Review', 'Sentiment'])
+    imdb_train = read_dataset('IMDB-train.txt')
+    imdb_valid = read_dataset('IMDB-valid.txt')
+    imdb_test = read_dataset('IMDB-test.txt')
 
-    # Aggregate the datasets for easier processing
-    yelp = {'train': yelp_train, 'valid': yelp_valid, 'test': yelp_test}
-    imdb = {'train': imdb_train, 'valid': imdb_valid, 'test': imdb_test}
+    # yelp
+    datasets = {
+        'yelp': {'train': yelp_train, 'valid': yelp_valid, 'test': yelp_test},
+        'imdb': {'train': imdb_train, 'valid': imdb_valid, 'test': imdb_test}
+    }
 
     # Group sets
     training = {'yelp': yelp_train, 'imdb': imdb_train}
@@ -61,22 +125,54 @@ if __name__ == '__main__':
     test = {'yelp': yelp_test, 'imdb': imdb_test}
 
     # Sanity Check
+    print('CHECK DATA:')
     for name, training_set in training.items():
         print(name.upper(), 'size:', str(len(training_set)))
-        print(training_set.head(), '\n', '-' * 50)
+        print(training_set.head(), '\n', '-' * 80)
 
     '''
-    Question 1: Prepare the data
+    Question 1: Preprocessing
     '''
-    # Preprocess the training sets:
-    for training_set in training.values():
-        preprocess_text(training_set, "Review")
+    for s in datasets.values():
+        for df in s.values():
+            preprocess(df, 'Review')
 
     # Verify preprocessing
+    print('\nAFTER PREPROCESSING:')
     for name, training_set in training.items():
-        print(name.upper(), 'size:', str(len(training_set)))
-        print(training_set.head(), '\n', '-' * 50)
+        print(training_set.head(), '\n', '-' * 80)
 
-    # Get the frequencies in descending order
-    # frequency_yelp = frequency_count('', False)
-    print(yelp_train['Review'].str.split())
+    # Generate vocabulary for yelp and imdb datasets from training data, and write to file
+    vocabulary = get_vocabulary(training, 'Review', M_FEATURES, WRITE)
+
+    # Bag of words
+    yelp_binary, yelp_freq = bag_of_words(datasets['yelp'], vocabulary['yelp'])
+    imdb_binary, imdb_freq = bag_of_words(datasets['imdb'], vocabulary['imdb'])
+
+    # Write converted datasets to file
+    if WRITE:
+        write_converted_dataset(datasets, vocabulary, 'yelp')
+        write_converted_dataset(datasets, vocabulary, 'imdb')
+
+
+    # run_predictions([random_classifier, majority_class_classifier, LinearSVC(), DecisionTreeClassifier()])
+
+    '''
+    Question 2: Yelp binary bag of words with hyperparameter turning using GridSearchCV :)
+    '''
+    print('Yelp Binary Bag of Words Performances')
+    do_clf_test(random_classifier, yelp_binary)
+    do_clf_test(majority_class_classifier, yelp_binary)
+    do_clf_test(BernoulliNB(), yelp_binary)
+    do_clf_test(DecisionTreeClassifier(), yelp_binary)
+    do_clf_test(LinearSVC(), yelp_binary)
+
+    '''
+    Question 3: Yelp frequency bag of words
+    '''
+    print('Yelp Frequency Bag of Words Performances')
+    do_clf_test(random_classifier, yelp_freq)
+    do_clf_test(majority_class_classifier, yelp_freq)
+    # do_clf_test(GaussianNB(), yelp_freq)
+    do_clf_test(DecisionTreeClassifier(), yelp_freq)
+    do_clf_test(LinearSVC(), yelp_freq)
