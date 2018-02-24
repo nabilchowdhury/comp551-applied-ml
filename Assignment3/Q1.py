@@ -91,14 +91,29 @@ def majority_class_classifier(train_on, predict_on):
     return np.full(len(predict_on[1]), scipy.stats.mode(train_on[1])[0][0])
 
 
+def print_format(s, *args):
+    print(s.format(*args))
+
+
 def do_clf_test(clf, dataset_dict, tune_params=None, average='micro'):
-    for dname, dset in dataset_dict.items():
-        if callable(clf):
-            print('\t{} score using {}: {}\n'.format(dname.upper(), clf.__name__.upper(), f1_score(dset[1], clf(dataset_dict['train'], dset), average=average)))
+    name = clf.__name__.upper() if callable(clf) else clf.__class__.__name__.upper()
+    if not callable(clf):
+        if tune_params is not None:
+            # Set up GridSearch with validation set
+            total_length = len(dataset_dict['train'][1]) + len(dataset_dict['valid'][1])
+            ps = PredefinedSplit(test_fold=[-1 if i < len(dataset_dict['train'][1]) else 0 for i in range(total_length)])
+            clf = GridSearchCV(clf, tune_params, cv=ps, refit=True)
+            train_x = scipy.sparse.vstack([dataset_dict['train'][0], dataset_dict['valid'][0]])
+            train_y = np.concatenate([dataset_dict['train'][1], dataset_dict['valid'][1]])
         else:
-            clf = GridSearchCV(clf, tune_params, cv=n_folds)
-            clf.fit(dataset_dict['train'][0], dataset_dict['train'][1])
-            print('\t{} score using {}: {}\n'.format(dname, clf.__class__.__name__.upper(), f1_score(dset[1], clf.predict(dset[0]), average=average)))
+            train_x = dataset_dict['train'][0]
+            train_y = dataset_dict['train'][1]
+
+        clf.fit(train_x, train_y)
+
+    for dname, dset in dataset_dict.items():
+        score = f1_score(dset[1], clf(dataset_dict['train'], dset) if callable(clf) else clf.predict(dset[0]), average=average)
+        print_format('\t{} score using {}: {}\n', dname.upper(), name, score)
 
 
 if __name__ == '__main__':
@@ -161,18 +176,18 @@ if __name__ == '__main__':
     Question 2: Yelp binary bag of words with hyperparameter turning using GridSearchCV :)
     '''
     print('Yelp Binary Bag of Words Performances')
-    do_clf_test(random_classifier, yelp_binary)
-    do_clf_test(majority_class_classifier, yelp_binary)
-    do_clf_test(BernoulliNB(), yelp_binary)
-    do_clf_test(DecisionTreeClassifier(), yelp_binary)
-    do_clf_test(LinearSVC(), yelp_binary)
+    # do_clf_test(random_classifier, yelp_binary)
+    # do_clf_test(majority_class_classifier, yelp_binary)
+    do_clf_test(BernoulliNB(), yelp_binary, [{'alpha': [pow(10, -i) for i in range(6)]}])
+    # do_clf_test(DecisionTreeClassifier(), yelp_binary)
+    # do_clf_test(LinearSVC(), yelp_binary)
 
     '''
     Question 3: Yelp frequency bag of words
     '''
-    print('Yelp Frequency Bag of Words Performances')
-    do_clf_test(random_classifier, yelp_freq)
-    do_clf_test(majority_class_classifier, yelp_freq)
-    # do_clf_test(GaussianNB(), yelp_freq)
-    do_clf_test(DecisionTreeClassifier(), yelp_freq)
-    do_clf_test(LinearSVC(), yelp_freq)
+    # print('Yelp Frequency Bag of Words Performances')
+    # do_clf_test(random_classifier, yelp_freq)
+    # do_clf_test(majority_class_classifier, yelp_freq)
+    # # do_clf_test(GaussianNB(), yelp_freq)
+    # do_clf_test(DecisionTreeClassifier(), yelp_freq)
+    # do_clf_test(LinearSVC(), yelp_freq)
